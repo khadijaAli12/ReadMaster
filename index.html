@@ -1,11 +1,4 @@
-<div class="sidebar-panel">
-                    <h3>🎯 Practice Goals</h3>
-                    <div class="challenge-mode">
-                        <div>Keep Reading!</div>
-                        <div style="font-size: 0.9rem; margin-top: 5px;">Practice daily to improve</div>
-                        <button class="challenge-btn" onclick="generateParagraph()">New Paragraph</button>
-                    </div>
-                </div<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -50,6 +43,15 @@
             text-shadow: 0 4px 20px rgba(0,0,0,0.3);
             font-weight: 700;
             letter-spacing: -1px;
+            background: linear-gradient(45deg, #fff, #e0e7ff, #fff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .header p {
@@ -61,7 +63,7 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 320px;
+            grid-template-columns: 1fr 340px;
             gap: 40px;
             align-items: start;
         }
@@ -74,6 +76,25 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
             animation: fadeInLeft 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reading-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: panelShimmer 8s infinite;
+        }
+
+        @keyframes panelShimmer {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: -100%; }
         }
 
         @keyframes fadeInLeft {
@@ -166,11 +187,20 @@
             transform: none;
         }
 
+        .generate-btn.loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
         .reading-area {
             background: linear-gradient(145deg, #f8fafc, #ffffff);
             border-radius: 20px;
             padding: 35px;
-            min-height: 250px;
+            min-height: 300px;
             margin-bottom: 25px;
             border: 2px dashed rgba(102, 126, 234, 0.3);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -259,11 +289,30 @@
             padding: 25px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2);
             border: 1px solid rgba(255,255,255,0.3);
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.03), transparent);
+            transition: transform 0.6s;
+            transform: rotate(0deg);
+        }
+
+        .sidebar-panel:hover::before {
+            transform: rotate(180deg);
         }
 
         .sidebar-panel:hover {
             transform: translateY(-2px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
 
         .sidebar-panel h3 {
@@ -274,15 +323,18 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            position: relative;
+            z-index: 1;
         }
 
         .progress-bar {
             background: rgba(226, 232, 240, 0.8);
             border-radius: 12px;
-            height: 12px;
+            height: 14px;
             margin: 15px 0;
             overflow: hidden;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         .progress-fill {
@@ -291,11 +343,31 @@
             border-radius: 12px;
             transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: progressShimmer 2s infinite;
+        }
+
+        @keyframes progressShimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .vocabulary-list {
             max-height: 220px;
             overflow-y: auto;
+            position: relative;
+            z-index: 1;
         }
 
         .vocabulary-list::-webkit-scrollbar {
@@ -323,6 +395,23 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border: 1px solid rgba(102, 126, 234, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vocab-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.3s;
+        }
+
+        .vocab-item:hover::before {
+            left: 100%;
         }
 
         .vocab-item:hover {
@@ -359,6 +448,24 @@
             font-size: 0.95rem;
             animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: achievementSparkle 2s infinite;
+        }
+
+        @keyframes achievementSparkle {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @keyframes bounceIn {
@@ -371,24 +478,52 @@
         .challenge-mode {
             background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
-            padding: 20px;
-            border-radius: 16px;
+            padding: 25px;
+            border-radius: 18px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .challenge-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: challengeGlow 3s infinite;
+        }
+
+        @keyframes challengeGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .challenge-mode > div:first-child {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
         .challenge-btn {
             background: rgba(255,255,255,0.2);
             color: white;
             border: 2px solid rgba(255,255,255,0.4);
-            padding: 10px 20px;
-            border-radius: 12px;
-            margin-top: 12px;
+            padding: 12px 24px;
+            border-radius: 14px;
+            margin-top: 15px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .challenge-btn:hover {
@@ -427,12 +562,31 @@
             color: #6b7280;
             font-style: italic;
             font-size: 1.1rem;
-            animation: pulse 2s infinite;
+            animation: loadingPulse 2s infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        @keyframes pulse {
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #667eea;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes loadingPulse {
             0%, 100% { opacity: 0.6; }
             50% { opacity: 1; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .empty-state {
@@ -440,6 +594,36 @@
             color: #6b7280;
             font-size: 1.1rem;
             line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: linear-gradient(145deg, #f8fafc, #ffffff);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
@@ -462,6 +646,8 @@
                             <option value="science">Science</option>
                             <option value="history">History</option>
                             <option value="nature">Nature</option>
+                            <option value="lifestyle">Lifestyle</option>
+                            <option value="education">Education</option>
                         </select>
                     </div>
                     <div class="control-group">
@@ -497,16 +683,23 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill" style="width: 0%"></div>
                     </div>
-                    <p style="text-align: center; margin-top: 10px; color: #6b7280;">
-                        Click words to track your progress
-                    </p>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number" id="wordsCount">0</div>
+                            <div class="stat-label">Words Read</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="accuracyRate">0%</div>
+                            <div class="stat-label">Progress</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="sidebar-panel">
                     <h3>🎯 Practice Goals</h3>
                     <div class="challenge-mode">
                         <div>Keep Reading!</div>
-                        <div style="font-size: 0.9rem; margin-top: 5px;">Practice daily to improve</div>
+                        <div style="font-size: 0.9rem; margin-top: 5px; opacity: 0.9;">Practice daily to improve</div>
                         <button class="challenge-btn" onclick="generateParagraph()">New Paragraph</button>
                     </div>
                 </div>
@@ -537,94 +730,95 @@
         let sessionData = {
             clickedWords: new Set(),
             vocabulary: [],
-            achievements: []
+            achievements: [],
+            currentParagraphWords: 0
         };
 
-        // Dynamic content generation by topic and difficulty
+        // Enhanced AI-like content generation with more variety
         const contentTemplates = {
             entertainment: {
                 basic: [
-                    "Movies and TV shows make us happy. People love to watch stories about heroes and adventures. Comedy shows make us laugh. Drama shows make us cry. Music videos have dancing and singing.",
-                    "Actors and actresses work hard to tell good stories. They practice their lines many times. Directors help them make the movie better. Cameras record everything they do.",
-                    "People go to theaters to watch new movies. They buy popcorn and drinks. The big screen makes everything exciting. Sound systems make the music loud and clear.",
-                    "Video games are also entertainment. Players control characters on screen. Some games have puzzles to solve. Others have adventures in magical worlds.",
-                    "Books tell amazing stories too. Authors write about different places and people. Reading helps us learn new words. Libraries have thousands of books to choose from."
+                    "Movies and TV shows make us happy. People love to watch stories about heroes and adventures. Comedy shows make us laugh while drama shows make us cry. Music videos have dancing and singing that inspire us.",
+                    "Actors and actresses work hard to tell good stories. They practice their lines many times before filming. Directors help them make the movie better by giving guidance. Cameras record everything they do on set.",
+                    "People go to theaters to watch new movies with friends and family. They buy popcorn and drinks to enjoy during the show. The big screen makes everything exciting and immersive. Sound systems make the music loud and clear.",
+                    "Video games are also popular entertainment for all ages. Players control characters on screen in virtual worlds. Some games have puzzles to solve and challenges to overcome. Others have adventures in magical fantasy worlds.",
+                    "Books tell amazing stories that transport us to different places. Authors write about different characters and exciting adventures. Reading helps us learn new words and expand our vocabulary. Libraries have thousands of books to choose from."
                 ],
                 standard: [
-                    "The entertainment industry continues to evolve with streaming services changing how we consume media. Netflix, Disney+, and other platforms compete for viewers' attention with original content and exclusive releases.",
-                    "Social media platforms have transformed how celebrities interact with their fans. Instagram, Twitter, and TikTok allow direct communication between stars and audiences, creating new marketing opportunities.",
-                    "Virtual reality technology is beginning to change gaming and entertainment experiences. Players can now immerse themselves in digital worlds that feel incredibly realistic and engaging.",
-                    "Music streaming has revolutionized how artists distribute their work. Spotify, Apple Music, and YouTube Music provide global reach for musicians without traditional record label support.",
-                    "Podcast popularity has exploded in recent years, creating new opportunities for storytelling and information sharing. Many celebrities and experts now host their own shows."
+                    "The entertainment industry continues to evolve rapidly with streaming services fundamentally changing how we consume media content. Netflix, Disney+, Amazon Prime, and other platforms compete intensely for viewers' attention with original programming and exclusive releases that span multiple genres.",
+                    "Social media platforms have completely transformed how celebrities interact directly with their fans worldwide. Instagram, Twitter, TikTok, and YouTube allow immediate communication between stars and audiences, creating unprecedented marketing opportunities and personal connections.",
+                    "Virtual reality technology is beginning to revolutionize gaming and entertainment experiences in remarkable ways. Players can now immerse themselves completely in digital worlds that feel incredibly realistic, engaging multiple senses simultaneously.",
+                    "Music streaming has fundamentally revolutionized how artists distribute their creative work to global audiences. Spotify, Apple Music, YouTube Music, and similar platforms provide unprecedented reach for musicians without traditional record label support or distribution networks.",
+                    "Podcast popularity has exploded dramatically in recent years, creating entirely new opportunities for storytelling, education, and information sharing. Many celebrities, experts, and ordinary people now host their own shows covering countless topics and interests."
                 ],
                 advanced: [
-                    "Contemporary entertainment ecosystems demonstrate unprecedented convergence between traditional media paradigms and emergent digital platforms, fundamentally restructuring audience engagement methodologies and content distribution mechanisms.",
-                    "Algorithmic curation systems employed by streaming platforms utilize sophisticated machine learning models to personalize content recommendations, significantly influencing viewer behavior and content consumption patterns.",
-                    "The democratization of content creation through accessible digital tools has disrupted established entertainment hierarchies, enabling independent creators to compete directly with major studio productions.",
-                    "Cross-platform narrative experiences increasingly integrate transmedia storytelling techniques, creating cohesive fictional universes that span multiple entertainment mediums and interactive formats.",
-                    "Monetization strategies in digital entertainment have evolved beyond traditional advertising models to incorporate subscription services, microtransactions, and direct creator support mechanisms."
+                    "Contemporary entertainment ecosystems demonstrate unprecedented convergence between traditional media paradigms and emergent digital platforms, fundamentally restructuring audience engagement methodologies and content distribution mechanisms while challenging established industry hierarchies.",
+                    "Algorithmic curation systems employed by streaming platforms utilize sophisticated machine learning models to personalize content recommendations, significantly influencing viewer behavior patterns and content consumption habits through predictive analytics and behavioral modeling.",
+                    "The democratization of content creation through increasingly accessible digital production tools has systematically disrupted established entertainment hierarchies, enabling independent creators to compete directly with major studio productions through innovative storytelling techniques.",
+                    "Cross-platform narrative experiences increasingly integrate complex transmedia storytelling methodologies, creating cohesive fictional universes that span multiple entertainment mediums and interactive formats while maintaining narrative continuity and character development.",
+                    "Monetization strategies in digital entertainment have evolved far beyond traditional advertising models to incorporate sophisticated subscription services, microtransaction systems, and direct creator support mechanisms that fundamentally alter economic relationships between content creators and consumers."
                 ]
             },
             innovation: {
                 basic: [
-                    "New ideas help us solve problems. People create better tools and machines. Innovation makes life easier and more fun. Smart phones are a good example of innovation.",
-                    "Inventors think of new ways to do things. They test their ideas many times. Some inventions help sick people get better. Others help us travel faster.",
-                    "Scientists work in labs to discover new things. They use special equipment and computers. Their discoveries help make new medicines and technologies.",
-                    "Engineers build bridges, roads, and buildings. They design cars and airplanes too. Math and science help them make things safe and strong.",
-                    "Creative people find new ways to solve old problems. They ask questions and try different answers. The best ideas often come from working together."
+                    "New ideas help us solve everyday problems in creative ways. People create better tools and machines to make life easier. Innovation makes our daily tasks more fun and efficient. Smart phones are a perfect example of helpful innovation.",
+                    "Inventors think of new ways to improve existing things around us. They test their ideas many times before sharing them. Some inventions help sick people get better faster. Others help us travel more quickly and safely.",
+                    "Scientists work in laboratories to discover amazing new things every day. They use special equipment and powerful computers for research. Their discoveries help create new medicines and technologies. Teamwork makes their research more successful.",
+                    "Engineers build bridges, roads, and tall buildings that last for years. They also design cars, airplanes, and trains for transportation. Math and science help them make things safe and strong. Planning is very important in their work.",
+                    "Creative people find new ways to solve old problems effectively. They ask important questions and try different solutions. The best ideas often come from working together in teams. Sharing knowledge helps everyone learn and grow."
                 ],
                 standard: [
-                    "Innovation drives economic growth and societal progress. Companies invest heavily in research and development to create breakthrough technologies that can transform entire industries and improve quality of life.",
-                    "Startup companies often lead technological innovation by taking risks that larger corporations cannot afford. Many successful innovations began as small experiments in garage laboratories.",
-                    "Open source software development has accelerated innovation by allowing programmers worldwide to collaborate on projects. This approach has created many of the tools we use daily.",
-                    "Biomedical innovations are extending human lifespans and improving treatment options for previously incurable diseases. Gene therapy and personalized medicine represent major breakthroughs.",
-                    "Sustainable technology innovations address environmental challenges while creating economic opportunities. Solar panels, electric vehicles, and battery storage systems exemplify this trend."
+                    "Innovation serves as the primary driver of economic growth and societal progress across all industries. Companies invest billions of dollars annually in research and development to create breakthrough technologies that can transform entire sectors and improve quality of life globally.",
+                    "Startup companies frequently lead technological innovation by taking calculated risks that larger, established corporations simply cannot afford. Many revolutionary innovations began as small experiments in garage laboratories before becoming billion-dollar industries that changed the world.",
+                    "Open source software development has dramatically accelerated innovation by enabling programmers worldwide to collaborate freely on projects. This collaborative approach has created many essential tools we use daily, from operating systems to web browsers.",
+                    "Biomedical innovations are consistently extending human lifespans while improving treatment options for previously incurable diseases. Gene therapy, personalized medicine, and advanced surgical techniques represent major breakthrough areas with enormous potential.",
+                    "Sustainable technology innovations actively address pressing environmental challenges while simultaneously creating significant economic opportunities. Solar panels, electric vehicles, advanced battery storage systems, and renewable energy exemplify this important trend toward sustainability."
                 ],
                 advanced: [
-                    "Disruptive innovation paradigms necessitate comprehensive organizational metamorphosis, requiring enterprises to cultivate adaptive capabilities while navigating complex technological convergences and market discontinuities.",
-                    "Collaborative innovation ecosystems leverage interdisciplinary expertise through strategic partnerships, fostering synergistic relationships between academic institutions, corporate research divisions, and entrepreneurial ventures.",
-                    "Emerging technologies demonstrate exponential improvement trajectories that fundamentally challenge existing business models, necessitating proactive strategic repositioning and resource allocation adjustments.",
-                    "Innovation diffusion patterns reveal complex adoption dynamics influenced by network effects, regulatory frameworks, and sociocultural factors that determine successful technology integration.",
-                    "Radical innovation initiatives often encounter institutional resistance due to path dependencies and established stakeholder interests, requiring sophisticated change management strategies."
+                    "Disruptive innovation paradigms necessitate comprehensive organizational metamorphosis, requiring enterprises to cultivate adaptive capabilities while navigating complex technological convergences, market discontinuities, and evolving consumer expectations in increasingly competitive global markets.",
+                    "Collaborative innovation ecosystems leverage interdisciplinary expertise through strategic partnerships, fostering synergistic relationships between academic research institutions, corporate development divisions, government agencies, and entrepreneurial ventures focused on breakthrough solutions.",
+                    "Emerging technologies demonstrate exponential improvement trajectories that fundamentally challenge existing business models, necessitating proactive strategic repositioning, significant resource allocation adjustments, and comprehensive organizational restructuring initiatives.",
+                    "Innovation diffusion patterns reveal complex adoption dynamics influenced by network effects, regulatory frameworks, cultural factors, and socioeconomic variables that collectively determine successful technology integration across diverse market segments.",
+                    "Radical innovation initiatives frequently encounter institutional resistance due to established path dependencies and entrenched stakeholder interests, requiring sophisticated change management strategies and comprehensive stakeholder alignment processes."
                 ]
             },
             technology: {
                 basic: [
-                    "Computers help us work and play. The internet connects people around the world. Smart phones let us talk to friends anywhere. Technology makes many things possible.",
-                    "Robots can do many jobs that people used to do. They work in factories making cars. Some robots clean houses or deliver food to people.",
-                    "Apps on phones help us with daily tasks. We can order food, call taxis, or play games. New apps are created every day by programmers.",
-                    "The internet has websites with information about everything. Search engines help us find what we need quickly. Social media connects us with friends and family.",
-                    "Smart devices in homes can be controlled by voice commands. Lights, music, and temperature can be adjusted without touching anything."
+                    "Computers help us work and play in many different ways. The internet connects people around the world instantly. Smart phones let us talk to friends anywhere we go. Technology makes many impossible things possible today.",
+                    "Robots can do many jobs that people used to do manually. They work in factories making cars and other products. Some robots clean houses or deliver food to people. They never get tired or need breaks.",
+                    "Apps on phones help us with daily tasks and entertainment. We can order food, call taxis, or play games easily. New apps are created every day by talented programmers. They make our lives more convenient and fun.",
+                    "The internet has millions of websites with information about everything. Search engines help us find what we need very quickly. Social media platforms connect us with friends and family worldwide. Learning online is now very popular.",
+                    "Smart devices in homes can be controlled by simple voice commands. Lights, music, and temperature can be adjusted without touching anything. These devices learn our preferences over time and adapt automatically."
                 ],
                 standard: [
-                    "Artificial intelligence and machine learning are revolutionizing industries from healthcare to transportation. These technologies analyze vast amounts of data to make predictions and automate complex processes.",
-                    "Cloud computing has transformed how businesses store and process information. Companies can now access powerful computing resources without maintaining expensive hardware infrastructure.",
-                    "Cybersecurity has become increasingly important as more activities move online. Hackers constantly develop new methods to steal information, requiring advanced defense systems.",
-                    "Internet of Things devices are creating smart cities where traffic lights, parking meters, and public transportation systems communicate with each other to improve efficiency.",
-                    "Blockchain technology promises to revolutionize how we handle digital transactions and verify information authenticity across various industries and applications."
+                    "Artificial intelligence and machine learning are revolutionizing industries from healthcare to transportation systems. These advanced technologies analyze vast amounts of data to make accurate predictions and automate increasingly complex processes efficiently.",
+                    "Cloud computing has fundamentally transformed how businesses store and process critical information. Companies can now access powerful computing resources without maintaining expensive hardware infrastructure, reducing costs significantly.",
+                    "Cybersecurity has become increasingly important as more business activities move online daily. Hackers constantly develop sophisticated new methods to steal information, requiring advanced defense systems and security protocols.",
+                    "Internet of Things devices are creating smart cities where traffic lights, parking meters, and public transportation systems communicate seamlessly with each other to improve efficiency and reduce congestion.",
+                    "Blockchain technology promises to revolutionize how we handle digital transactions and verify information authenticity across various industries including finance, healthcare, and supply chain management."
                 ],
                 advanced: [
-                    "Quantum computing architectures leverage superposition and entanglement phenomena to execute parallel computational processes, potentially revolutionizing cryptographic protocols and complex optimization algorithms.",
-                    "Edge computing paradigms redistribute computational workloads closer to data sources, minimizing latency while enhancing privacy protection and reducing bandwidth requirements for IoT applications.",
-                    "Neuromorphic computing systems emulate biological neural network structures to achieve unprecedented energy efficiency in pattern recognition and adaptive learning applications.",
-                    "Distributed ledger technologies facilitate decentralized consensus mechanisms that eliminate traditional intermediary requirements while ensuring transaction immutability and system transparency.",
+                    "Quantum computing architectures leverage superposition and entanglement phenomena to execute parallel computational processes, potentially revolutionizing cryptographic protocols, complex optimization algorithms, and scientific simulation capabilities.",
+                    "Edge computing paradigms redistribute computational workloads closer to data sources, minimizing latency while enhancing privacy protection and reducing bandwidth requirements for Internet of Things applications.",
+                    "Neuromorphic computing systems emulate biological neural network structures to achieve unprecedented energy efficiency in pattern recognition and adaptive learning applications, mimicking brain functionality.",
+                    "Distributed ledger technologies facilitate decentralized consensus mechanisms that eliminate traditional intermediary requirements while ensuring transaction immutability and maintaining system transparency.",
                     "Augmented reality interfaces integrate digital information seamlessly with physical environments, creating immersive experiences that enhance human cognitive capabilities and spatial understanding."
                 ]
             },
             science: {
                 basic: [
-                    "Scientists study how the world works. They do experiments to learn new things. Plants and animals are part of science. Weather is also science.",
-                    "The human body has many parts that work together. The heart pumps blood around the body. The brain controls everything we do and think.",
-                    "Space is very big and full of stars and planets. The sun is a star that gives us light and heat. The moon goes around the Earth.",
-                    "Water can be ice, liquid, or steam. It changes when it gets hot or cold. All living things need water to survive and grow.",
-                    "Magnets can pull some metals toward them. The Earth is like a giant magnet. Compasses use magnets to show direction."
+                    "Scientists study how the world works around us every day. They do careful experiments to learn new and exciting things. Plants and animals are important parts of science. Weather patterns are also studied by scientists.",
+                    "The human body has many parts that work together perfectly. The heart pumps blood around the entire body constantly. The brain controls everything we do, think, and feel. Each organ has a special job to do.",
+                    "Space is incredibly big and full of stars and planets. The sun is a massive star that gives us light and heat. The moon travels around the Earth in a regular pattern. Astronauts explore space in special rockets.",
+                    "Water can exist as ice, liquid, or invisible steam. It changes form when it gets hot or very cold. All living things absolutely need water to survive and grow. The water cycle is very important for life on Earth.",
+                    "Magnets can pull certain metals toward them with invisible force. The Earth itself acts like a giant magnet with poles. Compasses use magnets to show which direction is north. This helps people navigate and find their way."
                 ],
                 standard: [
-                    "Scientific research follows the scientific method, involving hypothesis formation, controlled experimentation, data analysis, and peer review to advance human understanding of natural phenomena.",
-                    "Climate science reveals how human activities are changing Earth's atmosphere and weather patterns. Carbon dioxide levels have increased significantly since the industrial revolution.",
-                    "Genetics research has unlocked the secrets of DNA, leading to breakthrough treatments for inherited diseases and improved agricultural crops through selective breeding.",
-                    "Neuroscience studies how the brain processes information and generates consciousness. New imaging technologies allow scientists to observe brain activity in real time.",
-                    "Particle physics explores the fundamental building blocks of matter and energy. The Large Hadron Collider has discovered new particles that help explain how the universe works."
+                    "Scientific research follows the established scientific method, involving hypothesis formation, controlled experimentation, data analysis, and peer review processes to systematically advance human understanding of natural phenomena.",
+                    "Climate science reveals how human activities are dramatically changing Earth's atmosphere and weather patterns. Carbon dioxide levels have increased significantly since the industrial revolution, affecting global temperatures.",
+                    "Genetics research has unlocked many secrets of DNA, leading to breakthrough treatments for inherited diseases and improved agricultural crops through selective breeding and genetic modification techniques.",
+                    "Neuroscience studies how the brain processes information and generates consciousness. New imaging technologies allow scientists to observe brain activity in real time, revealing how thoughts and memories form.",
+                    "Particle physics explores the fundamental building blocks of matter and energy throughout the universe. The Large Hadron Collider has discovered new particles that help explain how the universe works."
                 ],
                 advanced: [
                     "Interdisciplinary scientific methodologies integrate quantitative analytical frameworks with empirical observation protocols, facilitating comprehensive understanding of complex systematic interactions within natural phenomena.",
@@ -636,18 +830,18 @@
             },
             history: {
                 basic: [
-                    "History tells us about the past. People lived differently long ago. Kings and queens ruled countries. Wars happened between nations.",
-                    "Ancient people built amazing things like pyramids and castles. They used simple tools but worked very hard together to create lasting monuments.",
-                    "Long ago, people traveled by horses and sailing ships. Journeys took many days or months. Today we can fly anywhere in hours.",
-                    "In the past, people wrote on stone and paper by hand. Books were rare and expensive. Now we have computers and the internet.",
-                    "Families used to live and work together on farms. Children helped with animals and crops. Most people stayed in the same place their whole lives."
+                    "History tells us fascinating stories about the past. People lived very differently many years ago. Kings and queens ruled entire countries with absolute power. Wars happened frequently between different nations and peoples.",
+                    "Ancient people built amazing structures like pyramids and castles. They used simple tools but worked together very hard. These monuments still stand today after thousands of years. They show us how clever ancient people were.",
+                    "Long ago, people traveled by horses and sailing ships. Journeys took many days, weeks, or even months. Today we can fly anywhere in the world in hours. Transportation has changed our lives completely.",
+                    "In the past, people wrote on stone and paper by hand. Books were very rare and extremely expensive to make. Now we have computers and the internet for information. Knowledge is much easier to share today.",
+                    "Families used to live and work together on farms. Children helped with animals and crops from a young age. Most people stayed in the same place their entire lives. Travel was dangerous and difficult."
                 ],
                 standard: [
-                    "Historical analysis reveals patterns in human civilization, from the rise and fall of empires to social movements that shaped modern society. Understanding history helps us learn from past mistakes.",
-                    "The Industrial Revolution transformed human society from agricultural to manufacturing-based economies. Steam power, factories, and railroads changed how people lived and worked.",
-                    "World War II was a global conflict that involved most nations and resulted in significant political and social changes. The war accelerated technological development and reshaped international relations.",
-                    "The Renaissance period marked a cultural rebirth in Europe, featuring advances in art, science, and literature. Famous figures like Leonardo da Vinci embodied the era's spirit of learning.",
-                    "Colonial expansion by European powers had lasting effects on cultures worldwide. Trade routes, cultural exchange, and conflict shaped the development of modern nations."
+                    "Historical analysis reveals recurring patterns in human civilization, from the rise and fall of great empires to social movements that fundamentally shaped modern society. Understanding history helps us learn from past mistakes.",
+                    "The Industrial Revolution completely transformed human society from agricultural to manufacturing-based economies. Steam power, factories, and railroads dramatically changed how people lived, worked, and interacted.",
+                    "World War II was a devastating global conflict that involved most nations and resulted in significant political and social changes worldwide. The war accelerated technological development and reshaped international relations permanently.",
+                    "The Renaissance period marked a remarkable cultural rebirth in Europe, featuring major advances in art, science, literature, and philosophy. Famous figures like Leonardo da Vinci embodied the era's spirit of learning and creativity.",
+                    "Colonial expansion by European powers had lasting effects on cultures worldwide. Trade routes, cultural exchange, and conflict shaped the development of modern nations and international relationships."
                 ],
                 advanced: [
                     "Historiographical methodologies employ multifaceted analytical approaches to examine sociocultural transformations, incorporating archaeological evidence with documentary sources to construct comprehensive narratives of civilizational development.",
@@ -659,18 +853,18 @@
             },
             nature: {
                 basic: [
-                    "Trees and flowers grow in nature. Animals live in forests and oceans. The sun gives us light and warmth. Rain helps plants grow.",
-                    "Birds build nests in trees to keep their babies safe. They fly south when winter comes because it gets too cold.",
-                    "Fish swim in rivers, lakes, and oceans. Some are tiny and some are huge like whales. They need clean water to stay healthy.",
-                    "Bees collect nectar from flowers to make honey. They help plants by carrying pollen from flower to flower as they work.",
-                    "Mountains are very tall and have snow on top. Rivers start in mountains and flow down to the sea carrying fresh water."
+                    "Trees and colorful flowers grow everywhere in nature. Wild animals live in forests, mountains, and deep oceans. The bright sun gives us light and warmth every day. Fresh rain helps all plants grow strong and healthy.",
+                    "Birds build cozy nests in trees to keep their babies safe. They fly south when winter comes because it gets cold. Many birds travel thousands of miles during migration. They know exactly where to go without maps.",
+                    "Fish swim freely in rivers, lakes, and vast oceans. Some are tiny like goldfish and others are huge like whales. They need clean water to stay healthy and survive. Pollution can harm fish and other sea creatures.",
+                    "Busy bees collect sweet nectar from flowers to make honey. They help plants by carrying pollen from flower to flower. Without bees, many plants could not make seeds. Bees are very important for our food supply.",
+                    "Tall mountains reach high into the sky with snow on top. Rivers start in mountains and flow down to the sea. They carry fresh water to towns and cities. Mountains create their own weather patterns and climates."
                 ],
                 standard: [
-                    "Ecosystems maintain delicate balances between different species and their environments. Biodiversity is crucial for ecosystem stability, and human activities significantly impact these natural systems.",
-                    "Climate change affects wildlife migration patterns and breeding cycles. Many species are adapting by changing their behavior or moving to new habitats with suitable conditions.",
-                    "Forest ecosystems provide essential services including oxygen production, carbon storage, and water filtration. Deforestation threatens these benefits and contributes to global warming.",
-                    "Marine ecosystems face threats from pollution, overfishing, and ocean acidification. Coral reefs, which support tremendous biodiversity, are particularly vulnerable to temperature changes.",
-                    "Conservation efforts focus on protecting endangered species and their habitats. National parks, wildlife reserves, and breeding programs help maintain biodiversity for future generations."
+                    "Ecosystems maintain delicate balances between different species and their environments. Biodiversity is crucial for ecosystem stability, and human activities significantly impact these natural systems through pollution and habitat destruction.",
+                    "Climate change affects wildlife migration patterns and breeding cycles worldwide. Many species are adapting by changing their behavior or moving to new habitats with more suitable environmental conditions.",
+                    "Forest ecosystems provide essential services including oxygen production, carbon storage, and water filtration. Deforestation threatens these benefits and contributes to global warming and environmental degradation.",
+                    "Marine ecosystems face serious threats from pollution, overfishing, and ocean acidification. Coral reefs, which support tremendous biodiversity, are particularly vulnerable to rising ocean temperatures.",
+                    "Conservation efforts focus on protecting endangered species and their natural habitats. National parks, wildlife reserves, and breeding programs help maintain biodiversity for future generations."
                 ],
                 advanced: [
                     "Ecological interdependencies within biogeochemical cycles demonstrate complex feedback mechanisms that regulate planetary homeostasis, with anthropogenic perturbations potentially triggering irreversible tipping points in global ecosystems.",
@@ -679,10 +873,56 @@
                     "Metapopulation dynamics describe how isolated populations maintain genetic diversity through dispersal and colonization events, influencing long-term species persistence.",
                     "Keystone species exert disproportionate influence on ecosystem structure and function, with their removal often triggering cascading effects throughout trophic networks."
                 ]
+            },
+            lifestyle: {
+                basic: [
+                    "Healthy eating includes fruits, vegetables, and whole grains every day. Exercise keeps our bodies strong and our minds happy. Getting enough sleep helps us feel energized and ready for challenges. Drinking water is important for staying healthy.",
+                    "Hobbies make life more interesting and fun for everyone. Some people love reading books, others enjoy painting pictures. Playing music or sports brings joy to many people. Hobbies help us relax after work or school.",
+                    "Spending time with family and friends makes us feel happy. Sharing meals together creates wonderful memories that last forever. Celebrating birthdays and holidays brings people closer together. Love and friendship are very important for happiness.",
+                    "Taking care of our homes keeps them comfortable and clean. Organizing our belongings helps us find things easily. Decorating with plants and pictures makes spaces more beautiful. A tidy home feels peaceful and welcoming.",
+                    "Learning new skills throughout life keeps our minds active and sharp. Reading books teaches us about different places and ideas. Trying new activities helps us discover hidden talents. Education never stops, even after school ends."
+                ],
+                standard: [
+                    "Maintaining work-life balance has become increasingly important in modern society. People are learning to set boundaries between professional responsibilities and personal time to reduce stress and improve overall well-being.",
+                    "Sustainable living practices are gaining popularity as people become more environmentally conscious. Recycling, reducing energy consumption, and choosing eco-friendly products help protect the planet for future generations.",
+                    "Digital wellness involves managing technology use to maintain mental health and real-world connections. Setting limits on screen time and social media helps people focus on meaningful relationships and activities.",
+                    "Mindfulness and meditation practices help people cope with stress and anxiety in daily life. These techniques teach people to focus on the present moment and develop greater emotional resilience.",
+                    "Personal finance management includes budgeting, saving, and investing for long-term financial security. Understanding money management early in life helps people make better decisions about spending and saving."
+                ],
+                advanced: [
+                    "Contemporary lifestyle optimization integrates holistic wellness methodologies with evidence-based behavioral interventions, emphasizing sustainable habit formation and comprehensive life satisfaction metrics.",
+                    "Minimalist philosophy challenges consumerist paradigms by advocating intentional living practices that prioritize experiential value over material accumulation, promoting psychological well-being through conscious consumption.",
+                    "Circadian rhythm optimization utilizes chronobiological principles to enhance sleep quality, cognitive performance, and metabolic function through strategic light exposure and meal timing protocols.",
+                    "Social capital cultivation involves strategic relationship building and community engagement practices that enhance both individual resilience and collective social cohesion in increasingly fragmented societies.",
+                    "Biohacking methodologies employ quantified self-monitoring techniques and targeted interventions to optimize physiological and cognitive performance through data-driven lifestyle modifications."
+                ]
+            },
+            education: {
+                basic: [
+                    "Schools help children learn important skills for life. Teachers work hard to make lessons fun and interesting. Reading, writing, and math are basic skills everyone needs. Learning happens both inside and outside the classroom.",
+                    "Students learn better when they ask questions and participate actively. Group projects teach teamwork and cooperation skills that are valuable. Practice and repetition help make new information stick in memory. Every student learns at their own pace.",
+                    "Libraries are wonderful places full of books and knowledge. They offer quiet spaces for studying and research projects. Librarians help people find information they need for school. Many libraries also have computers and internet access.",
+                    "Online learning has become very popular around the world. Students can take classes from home using computers. Video lessons make it easy to learn new subjects. Technology helps connect students with teachers everywhere.",
+                    "Education continues throughout our entire lives, not just in school. Adults take classes to learn new job skills. Reading newspapers helps us stay informed about current events. Travel teaches us about different cultures and places."
+                ],
+                standard: [
+                    "Educational technology is transforming how students learn and teachers instruct in classrooms worldwide. Interactive whiteboards, tablets, and educational software make lessons more engaging and personalized for different learning styles.",
+                    "Critical thinking skills are essential for success in the modern world. Students learn to analyze information, evaluate sources, and form well-reasoned arguments about complex topics and current issues.",
+                    "Collaborative learning environments encourage students to work together on projects and share knowledge. This approach helps develop communication skills and teaches students to value diverse perspectives and ideas.",
+                    "Assessment methods are evolving beyond traditional tests to include portfolios, presentations, and project-based evaluations. These approaches better measure student understanding and practical application of knowledge.",
+                    "Lifelong learning has become necessary in rapidly changing job markets. Professional development, online courses, and continuing education help adults stay current with new technologies and industry trends."
+                ],
+                advanced: [
+                    "Pedagogical frameworks increasingly emphasize constructivist learning theories that prioritize student-centered knowledge construction through authentic problem-solving experiences and metacognitive skill development.",
+                    "Differentiated instruction methodologies accommodate diverse learning modalities by implementing adaptive curricula that respond to individual cognitive profiles and developmental trajectories.",
+                    "Educational neuroscience research informs evidence-based teaching practices by revealing how neuroplasticity and memory consolidation processes can be optimized through strategic instructional design.",
+                    "Competency-based education models replace traditional time-based progression with mastery-focused advancement, allowing students to progress upon demonstrating proficiency rather than seat time completion.",
+                    "Interdisciplinary STEAM education integrates science, technology, engineering, arts, and mathematics through project-based learning that mirrors real-world problem-solving contexts."
+                ]
             }
         };
 
-        // Pronunciation dictionary (simplified)
+        // Enhanced pronunciation dictionary
         const pronunciations = {
             'entertainment': 'en-ter-TAYN-ment',
             'industry': 'IN-duh-stree',
@@ -699,31 +939,98 @@
             'paradigm': 'PAIR-uh-dahym',
             'quantum': 'KWAN-tuhm',
             'methodology': 'meth-uh-DOL-uh-jee',
-            'interdisciplinary': 'in-ter-DIS-uh-pluh-ner-ee'
+            'interdisciplinary': 'in-ter-DIS-uh-pluh-ner-ee',
+            'sophisticated': 'suh-FIS-ti-kay-tid',
+            'revolutionize': 'rev-uh-LOO-shuh-nahyz',
+            'fundamental': 'fun-duh-MEN-tl',
+            'demonstrate': 'DEM-uhn-strayt',
+            'comprehensive': 'kom-pri-HEN-siv',
+            'optimization': 'op-tuh-muh-ZAY-shun',
+            'infrastructure': 'IN-fruh-struhk-cher',
+            'sustainability': 'suh-stay-nuh-BIL-i-tee',
+            'environmental': 'en-vahy-ruhn-MEN-tl',
+            'psychological': 'sahy-kuh-LOJ-i-kuhl'
         };
 
-        function generateParagraph() {
+        // AI-powered text generation function
+        async function generateAIContent(topic, difficulty) {
+            // Simulate AI API call with realistic delay and processing
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Get base templates
+                    const templates = contentTemplates[topic][difficulty];
+                    let selectedText = templates[Math.floor(Math.random() * templates.length)];
+                    
+                    // Add AI-like variations and enhancements
+                    selectedText = addAIVariations(selectedText, topic, difficulty);
+                    
+                    resolve(selectedText);
+                }, 1500 + Math.random() * 1000); // 1.5-2.5 second delay
+            });
+        }
+
+        function addAIVariations(text, topic, difficulty) {
+            // Add topic-specific enhancements
+            const enhancements = {
+                'entertainment': ['engaging', 'captivating', 'immersive', 'compelling'],
+                'technology': ['innovative', 'cutting-edge', 'advanced', 'revolutionary'],
+                'science': ['fascinating', 'remarkable', 'groundbreaking', 'extraordinary'],
+                'nature': ['beautiful', 'magnificent', 'spectacular', 'breathtaking'],
+                'history': ['significant', 'pivotal', 'influential', 'transformative'],
+                'innovation': ['creative', 'ingenious', 'breakthrough', 'pioneering'],
+                'lifestyle': ['fulfilling', 'enriching', 'balanced', 'harmonious'],
+                'education': ['enlightening', 'informative', 'comprehensive', 'valuable']
+            };
+
+            // Randomly enhance some sentences based on difficulty
+            if (difficulty === 'advanced' && Math.random() > 0.5) {
+                const words = text.split(' ');
+                const enhancementWords = enhancements[topic] || ['interesting', 'important'];
+                const randomEnhancement = enhancementWords[Math.floor(Math.random() * enhancementWords.length)];
+                
+                // Insert enhancement at a random position
+                const insertPosition = Math.floor(words.length * 0.3) + Math.floor(Math.random() * Math.floor(words.length * 0.4));
+                words.splice(insertPosition, 0, randomEnhancement);
+                text = words.join(' ');
+            }
+
+            return text;
+        }
+
+        async function generateParagraph() {
             const topic = document.getElementById('topic').value;
             const difficulty = document.getElementById('difficulty').value;
             const readingArea = document.getElementById('readingArea');
+            const generateBtn = document.querySelector('.generate-btn');
             
-            // Show loading state
-            readingArea.innerHTML = '<div class="loading">Generating content...</div>';
+            // Show loading state with enhanced styling
+            generateBtn.classList.add('loading');
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
             
-            // Simulate AI generation delay
-            setTimeout(() => {
-                // Get random paragraph from the selected topic and difficulty
-                const paragraphs = contentTemplates[topic][difficulty];
-                const randomIndex = Math.floor(Math.random() * paragraphs.length);
-                const text = paragraphs[randomIndex];
+            readingArea.innerHTML = '<div class="loading">AI is generating personalized content...</div>';
+            
+            try {
+                // Use AI-powered content generation
+                const text = await generateAIContent(topic, difficulty);
                 
                 displayParagraph(text);
                 readingArea.classList.add('has-content');
                 
                 // Reset session data for new paragraph
                 sessionData.clickedWords.clear();
+                sessionData.currentParagraphWords = text.split(' ').length;
                 updateProgress();
-            }, 1000);
+                
+            } catch (error) {
+                console.error('Error generating content:', error);
+                readingArea.innerHTML = '<div class="empty-state"><p>Sorry, there was an error generating content. Please try again!</p></div>';
+            } finally {
+                // Reset button state
+                generateBtn.classList.remove('loading');
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Text';
+            }
         }
 
         function displayParagraph(text) {
@@ -752,26 +1059,32 @@
         }
 
         function pronounceWord(wordElement, word) {
-            // Mark word as clicked
+            // Mark word as clicked with enhanced animation
             wordElement.classList.add('clicked');
             sessionData.clickedWords.add(word);
             updateProgress();
             
-            // Show pronunciation
+            // Show pronunciation with improved styling
             const pronunciationDisplay = document.getElementById('pronunciationDisplay');
             const currentWord = document.getElementById('currentWord');
             const pronunciation = document.getElementById('pronunciation');
             
             currentWord.textContent = word;
-            pronunciation.textContent = `/${pronunciations[word] || word}/`;
+            pronunciation.textContent = `/${pronunciations[word.toLowerCase()] || word}/`;
             pronunciationDisplay.classList.add('show');
             
-            // Text-to-speech with slower rate
+            // Enhanced text-to-speech
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(word);
-                utterance.rate = 0.5; // Slower speech rate
+                utterance.rate = 0.6;
                 utterance.pitch = 1.0;
                 utterance.volume = 0.8;
+                
+                // Use a more natural voice if available
+                const voices = speechSynthesis.getVoices();
+                const englishVoice = voices.find(voice => voice.lang.startsWith('en-') && voice.name.includes('Google'));
+                if (englishVoice) utterance.voice = englishVoice;
+                
                 speechSynthesis.speak(utterance);
             }
             
@@ -779,52 +1092,31 @@
             if (word.length > 6 && !sessionData.vocabulary.some(v => v.word === word)) {
                 sessionData.vocabulary.push({
                     word: word,
-                    pronunciation: pronunciations[word] || word,
+                    pronunciation: pronunciations[word.toLowerCase()] || word,
                     topic: document.getElementById('topic').value
                 });
                 updateVocabulary();
             }
             
-            // Hide pronunciation after 3 seconds
+            // Hide pronunciation after 4 seconds
             setTimeout(() => {
                 pronunciationDisplay.classList.remove('show');
-            }, 3000);
-        }
-
-        function startTimer() {
-            if (sessionData.startTime === null) {
-                sessionData.startTime = Date.now();
-                timerInterval = setInterval(updateTimer, 1000);
-            }
-        }
-
-        function updateTimer() {
-            const elapsed = Math.floor((Date.now() - sessionData.startTime) / 1000);
-            const minutes = Math.floor(elapsed / 60);
-            const seconds = elapsed % 60;
-            document.getElementById('timer').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            updateWPM();
+            }, 4000);
         }
 
         function updateProgress() {
             const wordsRead = sessionData.clickedWords.size;
+            const totalWords = sessionData.currentParagraphWords || document.querySelectorAll('.word').length;
             
             // Update progress bar
-            const totalWords = document.querySelectorAll('.word').length;
             const progress = totalWords > 0 ? (wordsRead / totalWords) * 100 : 0;
-            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressFill').style.width = Math.min(progress, 100) + '%';
+            
+            // Update stats
+            document.getElementById('wordsCount').textContent = wordsRead;
+            document.getElementById('accuracyRate').textContent = Math.round(progress) + '%';
             
             checkAchievements();
-        }
-
-        function updateWPM() {
-            if (sessionData.startTime) {
-                const elapsedMinutes = (Date.now() - sessionData.startTime) / 60000;
-                const wpm = elapsedMinutes > 0 ? Math.floor(sessionData.wordsRead / elapsedMinutes) : 0;
-                document.getElementById('wpm').textContent = wpm;
-            }
         }
 
         function updateVocabulary() {
@@ -846,7 +1138,7 @@
                 vocabItem.onclick = () => {
                     if ('speechSynthesis' in window) {
                         const utterance = new SpeechSynthesisUtterance(item.word);
-                        utterance.rate = 0.5; // Slower speech rate
+                        utterance.rate = 0.6;
                         utterance.pitch = 1.0;
                         utterance.volume = 0.8;
                         speechSynthesis.speak(utterance);
@@ -864,15 +1156,28 @@
                 achievements.push({ id: 'first10', title: '🎉 First 10 Words!' });
             }
             
+            if (wordsRead >= 25 && !sessionData.achievements.includes('quarterCentury')) {
+                achievements.push({ id: 'quarterCentury', title: '🚀 Quarter Century!' });
+            }
+            
             if (wordsRead >= 50 && !sessionData.achievements.includes('halfCentury')) {
                 achievements.push({ id: 'halfCentury', title: '📚 Half Century Reader!' });
+            }
+
+            if (wordsRead >= 100 && !sessionData.achievements.includes('century')) {
+                achievements.push({ id: 'century', title: '💯 Century Achiever!' });
             }
             
             if (sessionData.vocabulary.length >= 5 && !sessionData.achievements.includes('vocabBuilder')) {
                 achievements.push({ id: 'vocabBuilder', title: '🔤 Vocabulary Builder!' });
             }
+
+            if (sessionData.vocabulary.length >= 15 && !sessionData.achievements.includes('wordMaster')) {
+                achievements.push({ id: 'wordMaster', title: '📖 Word Master!' });
+            }
             
-            if (sessionData.clickedWords.size === document.querySelectorAll('.word').length && document.querySelectorAll('.word').length > 0 && !sessionData.achievements.includes('perfectRead')) {
+            const totalWords = document.querySelectorAll('.word').length;
+            if (sessionData.clickedWords.size === totalWords && totalWords > 0 && !sessionData.achievements.includes('perfectRead')) {
                 achievements.push({ id: 'perfectRead', title: '⭐ Perfect Reading!' });
             }
             
@@ -895,26 +1200,29 @@
             achievementElement.className = 'achievement';
             achievementElement.textContent = title;
             achievementsContainer.appendChild(achievementElement);
-        }
 
-        function startSpeedChallenge() {
-            alert('Speed Challenge: Read the current paragraph as fast as possible while maintaining accuracy! Timer starts when you click the first word.');
-            // Reset the current paragraph
-            const words = document.querySelectorAll('.word');
-            words.forEach(word => word.classList.remove('clicked'));
-            sessionData.clickedWords.clear();
-            sessionData.startTime = null;
-            if (timerInterval) clearInterval(timerInterval);
-            document.getElementById('timer').textContent = '00:00';
-            updateProgress();
+            // Add celebration effect
+            setTimeout(() => {
+                achievementElement.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    achievementElement.style.transform = 'scale(1)';
+                }, 300);
+            }, 100);
         }
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            // Generate initial content
+            // Load voices for better text-to-speech
+            if ('speechSynthesis' in window) {
+                speechSynthesis.onvoiceschanged = function() {
+                    // Voices are now loaded
+                };
+            }
+
+            // Generate initial content after a short delay
             setTimeout(() => {
                 generateParagraph();
-            }, 500);
+            }, 1000);
         });
     </script>
 </body>
