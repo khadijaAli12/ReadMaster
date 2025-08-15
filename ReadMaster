@@ -1,0 +1,921 @@
+<div class="sidebar-panel">
+                    <h3>🎯 Practice Goals</h3>
+                    <div class="challenge-mode">
+                        <div>Keep Reading!</div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">Practice daily to improve</div>
+                        <button class="challenge-btn" onclick="generateParagraph()">New Paragraph</button>
+                    </div>
+                </div<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReadMaster - Practice Reading Aloud</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.95);
+            font-size: 1.3rem;
+            font-weight: 400;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .reading-panel {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: fadeInLeft 0.8s ease-out;
+        }
+
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .controls {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, button {
+            padding: 14px 18px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+        }
+
+        select {
+            cursor: pointer;
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+        }
+
+        select:focus, select:hover {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reading-area {
+            background: linear-gradient(145deg, #f8fafc, #ffffff);
+            border-radius: 20px;
+            padding: 35px;
+            min-height: 250px;
+            margin-bottom: 25px;
+            border: 2px dashed rgba(102, 126, 234, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .reading-area.has-content {
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            box-shadow: inset 0 2px 10px rgba(102, 126, 234, 0.05);
+        }
+
+        .paragraph {
+            font-size: 19px;
+            line-height: 1.9;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .word {
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 10px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
+            margin: 2px 1px;
+            position: relative;
+        }
+
+        .word:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+            z-index: 1;
+        }
+
+        .word.clicked {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .word.clicked:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+            transform: scale(1.05) translateY(-1px);
+        }
+
+        .pronunciation-display {
+            background: linear-gradient(145deg, #f0f9ff, #e0f2fe);
+            border: 2px solid #0ea5e9;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
+        }
+
+        .pronunciation-display.show {
+            display: block;
+            animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            animation: fadeInRight 0.8s ease-out;
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .sidebar-panel {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-panel:hover {
+            transform: translateY(-2px);
+        }
+
+        .sidebar-panel h3 {
+            color: #667eea;
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar {
+            background: rgba(226, 232, 240, 0.8);
+            border-radius: 12px;
+            height: 12px;
+            margin: 15px 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #10b981, #059669, #34d399);
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .vocabulary-list {
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .vocabulary-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .vocabulary-list::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+
+        .vocabulary-list::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+            border-radius: 10px;
+        }
+
+        .vocab-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: linear-gradient(145deg, #f8fafc, #ffffff);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .vocab-item:hover {
+            background: linear-gradient(145deg, #667eea, #764ba2);
+            color: white;
+            transform: translateX(4px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .vocab-word {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .vocab-item:hover .vocab-word,
+        .vocab-item:hover .vocab-pronunciation {
+            color: white;
+        }
+
+        .vocab-pronunciation {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        .achievement {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 15px 18px;
+            border-radius: 14px;
+            margin: 8px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3) translateY(20px); }
+            50% { opacity: 1; transform: scale(1.05) translateY(-10px); }
+            70% { transform: scale(0.9) translateY(0); }
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        .challenge-mode {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .challenge-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.4);
+            padding: 10px 20px;
+            border-radius: 12px;
+            margin-top: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .challenge-btn:hover {
+            background: rgba(255,255,255,0.9);
+            color: #8b5cf6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .reading-panel {
+                padding: 25px;
+            }
+            
+            .sidebar-panel {
+                padding: 20px;
+            }
+        }
+
+        .loading {
+            text-align: center;
+            color: #6b7280;
+            font-style: italic;
+            font-size: 1.1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #6b7280;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ReadMaster</h1>
+            <p>Practice reading aloud with AI-generated content and track your progress</p>
+        </div>
+
+        <div class="main-content">
+            <div class="reading-panel">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="topic">Topic</label>
+                        <select id="topic">
+                            <option value="entertainment">Entertainment</option>
+                            <option value="innovation">Innovation</option>
+                            <option value="technology">Technology</option>
+                            <option value="science">Science</option>
+                            <option value="history">History</option>
+                            <option value="nature">Nature</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="difficulty">Difficulty</label>
+                        <select id="difficulty">
+                            <option value="basic">Basic</option>
+                            <option value="standard">Standard</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>&nbsp;</label>
+                        <button class="generate-btn" onclick="generateParagraph()">Generate Text</button>
+                    </div>
+                </div>
+
+                <div class="reading-area" id="readingArea">
+                    <div class="empty-state">
+                        <p>Select a topic and difficulty level, then click "Generate Text" to start practicing!</p>
+                    </div>
+                </div>
+
+                <div class="pronunciation-display" id="pronunciationDisplay">
+                    <strong id="currentWord"></strong>
+                    <div id="pronunciation"></div>
+                    <small>Click to hear pronunciation</small>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-panel">
+                    <h3>📊 Reading Progress</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <p style="text-align: center; margin-top: 10px; color: #6b7280;">
+                        Click words to track your progress
+                    </p>
+                </div>
+
+                <div class="sidebar-panel">
+                    <h3>🎯 Practice Goals</h3>
+                    <div class="challenge-mode">
+                        <div>Keep Reading!</div>
+                        <div style="font-size: 0.9rem; margin-top: 5px;">Practice daily to improve</div>
+                        <button class="challenge-btn" onclick="generateParagraph()">New Paragraph</button>
+                    </div>
+                </div>
+
+                <div class="sidebar-panel">
+                    <h3>📚 Saved Vocabulary</h3>
+                    <div class="vocabulary-list" id="vocabularyList">
+                        <div class="empty-state" style="padding: 20px;">
+                            <p>Click on difficult words while reading to save them here!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-panel">
+                    <h3>🏆 Achievements</h3>
+                    <div id="achievements">
+                        <div class="empty-state" style="padding: 20px;">
+                            <p>Start reading to unlock achievements!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let sessionData = {
+            clickedWords: new Set(),
+            vocabulary: [],
+            achievements: []
+        };
+
+        // Dynamic content generation by topic and difficulty
+        const contentTemplates = {
+            entertainment: {
+                basic: [
+                    "Movies and TV shows make us happy. People love to watch stories about heroes and adventures. Comedy shows make us laugh. Drama shows make us cry. Music videos have dancing and singing.",
+                    "Actors and actresses work hard to tell good stories. They practice their lines many times. Directors help them make the movie better. Cameras record everything they do.",
+                    "People go to theaters to watch new movies. They buy popcorn and drinks. The big screen makes everything exciting. Sound systems make the music loud and clear.",
+                    "Video games are also entertainment. Players control characters on screen. Some games have puzzles to solve. Others have adventures in magical worlds.",
+                    "Books tell amazing stories too. Authors write about different places and people. Reading helps us learn new words. Libraries have thousands of books to choose from."
+                ],
+                standard: [
+                    "The entertainment industry continues to evolve with streaming services changing how we consume media. Netflix, Disney+, and other platforms compete for viewers' attention with original content and exclusive releases.",
+                    "Social media platforms have transformed how celebrities interact with their fans. Instagram, Twitter, and TikTok allow direct communication between stars and audiences, creating new marketing opportunities.",
+                    "Virtual reality technology is beginning to change gaming and entertainment experiences. Players can now immerse themselves in digital worlds that feel incredibly realistic and engaging.",
+                    "Music streaming has revolutionized how artists distribute their work. Spotify, Apple Music, and YouTube Music provide global reach for musicians without traditional record label support.",
+                    "Podcast popularity has exploded in recent years, creating new opportunities for storytelling and information sharing. Many celebrities and experts now host their own shows."
+                ],
+                advanced: [
+                    "Contemporary entertainment ecosystems demonstrate unprecedented convergence between traditional media paradigms and emergent digital platforms, fundamentally restructuring audience engagement methodologies and content distribution mechanisms.",
+                    "Algorithmic curation systems employed by streaming platforms utilize sophisticated machine learning models to personalize content recommendations, significantly influencing viewer behavior and content consumption patterns.",
+                    "The democratization of content creation through accessible digital tools has disrupted established entertainment hierarchies, enabling independent creators to compete directly with major studio productions.",
+                    "Cross-platform narrative experiences increasingly integrate transmedia storytelling techniques, creating cohesive fictional universes that span multiple entertainment mediums and interactive formats.",
+                    "Monetization strategies in digital entertainment have evolved beyond traditional advertising models to incorporate subscription services, microtransactions, and direct creator support mechanisms."
+                ]
+            },
+            innovation: {
+                basic: [
+                    "New ideas help us solve problems. People create better tools and machines. Innovation makes life easier and more fun. Smart phones are a good example of innovation.",
+                    "Inventors think of new ways to do things. They test their ideas many times. Some inventions help sick people get better. Others help us travel faster.",
+                    "Scientists work in labs to discover new things. They use special equipment and computers. Their discoveries help make new medicines and technologies.",
+                    "Engineers build bridges, roads, and buildings. They design cars and airplanes too. Math and science help them make things safe and strong.",
+                    "Creative people find new ways to solve old problems. They ask questions and try different answers. The best ideas often come from working together."
+                ],
+                standard: [
+                    "Innovation drives economic growth and societal progress. Companies invest heavily in research and development to create breakthrough technologies that can transform entire industries and improve quality of life.",
+                    "Startup companies often lead technological innovation by taking risks that larger corporations cannot afford. Many successful innovations began as small experiments in garage laboratories.",
+                    "Open source software development has accelerated innovation by allowing programmers worldwide to collaborate on projects. This approach has created many of the tools we use daily.",
+                    "Biomedical innovations are extending human lifespans and improving treatment options for previously incurable diseases. Gene therapy and personalized medicine represent major breakthroughs.",
+                    "Sustainable technology innovations address environmental challenges while creating economic opportunities. Solar panels, electric vehicles, and battery storage systems exemplify this trend."
+                ],
+                advanced: [
+                    "Disruptive innovation paradigms necessitate comprehensive organizational metamorphosis, requiring enterprises to cultivate adaptive capabilities while navigating complex technological convergences and market discontinuities.",
+                    "Collaborative innovation ecosystems leverage interdisciplinary expertise through strategic partnerships, fostering synergistic relationships between academic institutions, corporate research divisions, and entrepreneurial ventures.",
+                    "Emerging technologies demonstrate exponential improvement trajectories that fundamentally challenge existing business models, necessitating proactive strategic repositioning and resource allocation adjustments.",
+                    "Innovation diffusion patterns reveal complex adoption dynamics influenced by network effects, regulatory frameworks, and sociocultural factors that determine successful technology integration.",
+                    "Radical innovation initiatives often encounter institutional resistance due to path dependencies and established stakeholder interests, requiring sophisticated change management strategies."
+                ]
+            },
+            technology: {
+                basic: [
+                    "Computers help us work and play. The internet connects people around the world. Smart phones let us talk to friends anywhere. Technology makes many things possible.",
+                    "Robots can do many jobs that people used to do. They work in factories making cars. Some robots clean houses or deliver food to people.",
+                    "Apps on phones help us with daily tasks. We can order food, call taxis, or play games. New apps are created every day by programmers.",
+                    "The internet has websites with information about everything. Search engines help us find what we need quickly. Social media connects us with friends and family.",
+                    "Smart devices in homes can be controlled by voice commands. Lights, music, and temperature can be adjusted without touching anything."
+                ],
+                standard: [
+                    "Artificial intelligence and machine learning are revolutionizing industries from healthcare to transportation. These technologies analyze vast amounts of data to make predictions and automate complex processes.",
+                    "Cloud computing has transformed how businesses store and process information. Companies can now access powerful computing resources without maintaining expensive hardware infrastructure.",
+                    "Cybersecurity has become increasingly important as more activities move online. Hackers constantly develop new methods to steal information, requiring advanced defense systems.",
+                    "Internet of Things devices are creating smart cities where traffic lights, parking meters, and public transportation systems communicate with each other to improve efficiency.",
+                    "Blockchain technology promises to revolutionize how we handle digital transactions and verify information authenticity across various industries and applications."
+                ],
+                advanced: [
+                    "Quantum computing architectures leverage superposition and entanglement phenomena to execute parallel computational processes, potentially revolutionizing cryptographic protocols and complex optimization algorithms.",
+                    "Edge computing paradigms redistribute computational workloads closer to data sources, minimizing latency while enhancing privacy protection and reducing bandwidth requirements for IoT applications.",
+                    "Neuromorphic computing systems emulate biological neural network structures to achieve unprecedented energy efficiency in pattern recognition and adaptive learning applications.",
+                    "Distributed ledger technologies facilitate decentralized consensus mechanisms that eliminate traditional intermediary requirements while ensuring transaction immutability and system transparency.",
+                    "Augmented reality interfaces integrate digital information seamlessly with physical environments, creating immersive experiences that enhance human cognitive capabilities and spatial understanding."
+                ]
+            },
+            science: {
+                basic: [
+                    "Scientists study how the world works. They do experiments to learn new things. Plants and animals are part of science. Weather is also science.",
+                    "The human body has many parts that work together. The heart pumps blood around the body. The brain controls everything we do and think.",
+                    "Space is very big and full of stars and planets. The sun is a star that gives us light and heat. The moon goes around the Earth.",
+                    "Water can be ice, liquid, or steam. It changes when it gets hot or cold. All living things need water to survive and grow.",
+                    "Magnets can pull some metals toward them. The Earth is like a giant magnet. Compasses use magnets to show direction."
+                ],
+                standard: [
+                    "Scientific research follows the scientific method, involving hypothesis formation, controlled experimentation, data analysis, and peer review to advance human understanding of natural phenomena.",
+                    "Climate science reveals how human activities are changing Earth's atmosphere and weather patterns. Carbon dioxide levels have increased significantly since the industrial revolution.",
+                    "Genetics research has unlocked the secrets of DNA, leading to breakthrough treatments for inherited diseases and improved agricultural crops through selective breeding.",
+                    "Neuroscience studies how the brain processes information and generates consciousness. New imaging technologies allow scientists to observe brain activity in real time.",
+                    "Particle physics explores the fundamental building blocks of matter and energy. The Large Hadron Collider has discovered new particles that help explain how the universe works."
+                ],
+                advanced: [
+                    "Interdisciplinary scientific methodologies integrate quantitative analytical frameworks with empirical observation protocols, facilitating comprehensive understanding of complex systematic interactions within natural phenomena.",
+                    "Molecular biology techniques enable precise manipulation of genetic sequences, advancing therapeutic interventions through targeted gene editing and personalized treatment protocols.",
+                    "Astrophysical observations utilizing advanced spectroscopic analysis reveal fundamental cosmological parameters, constraining theoretical models of universe evolution and dark matter distribution.",
+                    "Computational modeling of biological systems employs sophisticated algorithms to simulate complex cellular processes, predicting emergent behaviors in multicellular organisms.",
+                    "Quantum mechanical principles govern subatomic interactions, influencing macroscopic phenomena through collective effects that challenge classical physics interpretations."
+                ]
+            },
+            history: {
+                basic: [
+                    "History tells us about the past. People lived differently long ago. Kings and queens ruled countries. Wars happened between nations.",
+                    "Ancient people built amazing things like pyramids and castles. They used simple tools but worked very hard together to create lasting monuments.",
+                    "Long ago, people traveled by horses and sailing ships. Journeys took many days or months. Today we can fly anywhere in hours.",
+                    "In the past, people wrote on stone and paper by hand. Books were rare and expensive. Now we have computers and the internet.",
+                    "Families used to live and work together on farms. Children helped with animals and crops. Most people stayed in the same place their whole lives."
+                ],
+                standard: [
+                    "Historical analysis reveals patterns in human civilization, from the rise and fall of empires to social movements that shaped modern society. Understanding history helps us learn from past mistakes.",
+                    "The Industrial Revolution transformed human society from agricultural to manufacturing-based economies. Steam power, factories, and railroads changed how people lived and worked.",
+                    "World War II was a global conflict that involved most nations and resulted in significant political and social changes. The war accelerated technological development and reshaped international relations.",
+                    "The Renaissance period marked a cultural rebirth in Europe, featuring advances in art, science, and literature. Famous figures like Leonardo da Vinci embodied the era's spirit of learning.",
+                    "Colonial expansion by European powers had lasting effects on cultures worldwide. Trade routes, cultural exchange, and conflict shaped the development of modern nations."
+                ],
+                advanced: [
+                    "Historiographical methodologies employ multifaceted analytical approaches to examine sociocultural transformations, incorporating archaeological evidence with documentary sources to construct comprehensive narratives of civilizational development.",
+                    "Comparative historical analysis reveals recurring patterns in imperial decline, demonstrating how economic overextension, administrative corruption, and external pressures contribute to systemic collapse.",
+                    "Social history perspectives emphasize the experiences of ordinary individuals, challenging traditional narratives that focus exclusively on political elites and major historical events.",
+                    "Cultural transmission mechanisms facilitated the diffusion of technological innovations, religious beliefs, and artistic traditions across vast geographical distances throughout human history.",
+                    "Historical contingency theory suggests that seemingly minor events can have profound long-term consequences, fundamentally altering the trajectory of human civilization."
+                ]
+            },
+            nature: {
+                basic: [
+                    "Trees and flowers grow in nature. Animals live in forests and oceans. The sun gives us light and warmth. Rain helps plants grow.",
+                    "Birds build nests in trees to keep their babies safe. They fly south when winter comes because it gets too cold.",
+                    "Fish swim in rivers, lakes, and oceans. Some are tiny and some are huge like whales. They need clean water to stay healthy.",
+                    "Bees collect nectar from flowers to make honey. They help plants by carrying pollen from flower to flower as they work.",
+                    "Mountains are very tall and have snow on top. Rivers start in mountains and flow down to the sea carrying fresh water."
+                ],
+                standard: [
+                    "Ecosystems maintain delicate balances between different species and their environments. Biodiversity is crucial for ecosystem stability, and human activities significantly impact these natural systems.",
+                    "Climate change affects wildlife migration patterns and breeding cycles. Many species are adapting by changing their behavior or moving to new habitats with suitable conditions.",
+                    "Forest ecosystems provide essential services including oxygen production, carbon storage, and water filtration. Deforestation threatens these benefits and contributes to global warming.",
+                    "Marine ecosystems face threats from pollution, overfishing, and ocean acidification. Coral reefs, which support tremendous biodiversity, are particularly vulnerable to temperature changes.",
+                    "Conservation efforts focus on protecting endangered species and their habitats. National parks, wildlife reserves, and breeding programs help maintain biodiversity for future generations."
+                ],
+                advanced: [
+                    "Ecological interdependencies within biogeochemical cycles demonstrate complex feedback mechanisms that regulate planetary homeostasis, with anthropogenic perturbations potentially triggering irreversible tipping points in global ecosystems.",
+                    "Phylogenetic relationships reveal evolutionary adaptations that enable species survival in specialized ecological niches, demonstrating natural selection pressures that shape biodiversity patterns.",
+                    "Ecosystem service valuations quantify the economic benefits provided by natural systems, including pollination, water purification, and carbon sequestration capabilities.",
+                    "Metapopulation dynamics describe how isolated populations maintain genetic diversity through dispersal and colonization events, influencing long-term species persistence.",
+                    "Keystone species exert disproportionate influence on ecosystem structure and function, with their removal often triggering cascading effects throughout trophic networks."
+                ]
+            }
+        };
+
+        // Pronunciation dictionary (simplified)
+        const pronunciations = {
+            'entertainment': 'en-ter-TAYN-ment',
+            'industry': 'IN-duh-stree',
+            'streaming': 'STREAM-ing',
+            'innovation': 'in-uh-VAY-shun',
+            'technology': 'tek-NOL-uh-jee',
+            'artificial': 'ar-tuh-FISH-uhl',
+            'intelligence': 'in-TEL-uh-juhns',
+            'scientific': 'sahy-uhn-TIF-ik',
+            'experiment': 'ik-SPER-uh-muhnt',
+            'historical': 'hi-STAWR-i-kuhl',
+            'ecosystem': 'EE-koh-sis-tuhm',
+            'biodiversity': 'bahy-oh-dih-VUR-si-tee',
+            'paradigm': 'PAIR-uh-dahym',
+            'quantum': 'KWAN-tuhm',
+            'methodology': 'meth-uh-DOL-uh-jee',
+            'interdisciplinary': 'in-ter-DIS-uh-pluh-ner-ee'
+        };
+
+        function generateParagraph() {
+            const topic = document.getElementById('topic').value;
+            const difficulty = document.getElementById('difficulty').value;
+            const readingArea = document.getElementById('readingArea');
+            
+            // Show loading state
+            readingArea.innerHTML = '<div class="loading">Generating content...</div>';
+            
+            // Simulate AI generation delay
+            setTimeout(() => {
+                // Get random paragraph from the selected topic and difficulty
+                const paragraphs = contentTemplates[topic][difficulty];
+                const randomIndex = Math.floor(Math.random() * paragraphs.length);
+                const text = paragraphs[randomIndex];
+                
+                displayParagraph(text);
+                readingArea.classList.add('has-content');
+                
+                // Reset session data for new paragraph
+                sessionData.clickedWords.clear();
+                updateProgress();
+            }, 1000);
+        }
+
+        function displayParagraph(text) {
+            const readingArea = document.getElementById('readingArea');
+            const words = text.split(' ');
+            
+            const paragraph = document.createElement('div');
+            paragraph.className = 'paragraph';
+            
+            words.forEach((word, index) => {
+                const cleanWord = word.replace(/[.,!?;:]/g, '');
+                const wordSpan = document.createElement('span');
+                wordSpan.className = 'word';
+                wordSpan.textContent = word;
+                wordSpan.dataset.word = cleanWord.toLowerCase();
+                wordSpan.onclick = () => pronounceWord(wordSpan, cleanWord);
+                paragraph.appendChild(wordSpan);
+                
+                if (index < words.length - 1) {
+                    paragraph.appendChild(document.createTextNode(' '));
+                }
+            });
+            
+            readingArea.innerHTML = '';
+            readingArea.appendChild(paragraph);
+        }
+
+        function pronounceWord(wordElement, word) {
+            // Mark word as clicked
+            wordElement.classList.add('clicked');
+            sessionData.clickedWords.add(word);
+            updateProgress();
+            
+            // Show pronunciation
+            const pronunciationDisplay = document.getElementById('pronunciationDisplay');
+            const currentWord = document.getElementById('currentWord');
+            const pronunciation = document.getElementById('pronunciation');
+            
+            currentWord.textContent = word;
+            pronunciation.textContent = `/${pronunciations[word] || word}/`;
+            pronunciationDisplay.classList.add('show');
+            
+            // Text-to-speech with slower rate
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(word);
+                utterance.rate = 0.5; // Slower speech rate
+                utterance.pitch = 1.0;
+                utterance.volume = 0.8;
+                speechSynthesis.speak(utterance);
+            }
+            
+            // Save to vocabulary if it's a complex word
+            if (word.length > 6 && !sessionData.vocabulary.some(v => v.word === word)) {
+                sessionData.vocabulary.push({
+                    word: word,
+                    pronunciation: pronunciations[word] || word,
+                    topic: document.getElementById('topic').value
+                });
+                updateVocabulary();
+            }
+            
+            // Hide pronunciation after 3 seconds
+            setTimeout(() => {
+                pronunciationDisplay.classList.remove('show');
+            }, 3000);
+        }
+
+        function startTimer() {
+            if (sessionData.startTime === null) {
+                sessionData.startTime = Date.now();
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - sessionData.startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            updateWPM();
+        }
+
+        function updateProgress() {
+            const wordsRead = sessionData.clickedWords.size;
+            
+            // Update progress bar
+            const totalWords = document.querySelectorAll('.word').length;
+            const progress = totalWords > 0 ? (wordsRead / totalWords) * 100 : 0;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            checkAchievements();
+        }
+
+        function updateWPM() {
+            if (sessionData.startTime) {
+                const elapsedMinutes = (Date.now() - sessionData.startTime) / 60000;
+                const wpm = elapsedMinutes > 0 ? Math.floor(sessionData.wordsRead / elapsedMinutes) : 0;
+                document.getElementById('wpm').textContent = wpm;
+            }
+        }
+
+        function updateVocabulary() {
+            const vocabularyList = document.getElementById('vocabularyList');
+            
+            if (sessionData.vocabulary.length === 0) {
+                vocabularyList.innerHTML = '<div class="empty-state" style="padding: 20px;"><p>Click on difficult words while reading to save them here!</p></div>';
+                return;
+            }
+            
+            vocabularyList.innerHTML = '';
+            sessionData.vocabulary.slice(-10).forEach(item => {
+                const vocabItem = document.createElement('div');
+                vocabItem.className = 'vocab-item';
+                vocabItem.innerHTML = `
+                    <span class="vocab-word">${item.word}</span>
+                    <span class="vocab-pronunciation">/${item.pronunciation}/</span>
+                `;
+                vocabItem.onclick = () => {
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(item.word);
+                        utterance.rate = 0.5; // Slower speech rate
+                        utterance.pitch = 1.0;
+                        utterance.volume = 0.8;
+                        speechSynthesis.speak(utterance);
+                    }
+                };
+                vocabularyList.appendChild(vocabItem);
+            });
+        }
+
+        function checkAchievements() {
+            const achievements = [];
+            const wordsRead = sessionData.clickedWords.size;
+            
+            if (wordsRead >= 10 && !sessionData.achievements.includes('first10')) {
+                achievements.push({ id: 'first10', title: '🎉 First 10 Words!' });
+            }
+            
+            if (wordsRead >= 50 && !sessionData.achievements.includes('halfCentury')) {
+                achievements.push({ id: 'halfCentury', title: '📚 Half Century Reader!' });
+            }
+            
+            if (sessionData.vocabulary.length >= 5 && !sessionData.achievements.includes('vocabBuilder')) {
+                achievements.push({ id: 'vocabBuilder', title: '🔤 Vocabulary Builder!' });
+            }
+            
+            if (sessionData.clickedWords.size === document.querySelectorAll('.word').length && document.querySelectorAll('.word').length > 0 && !sessionData.achievements.includes('perfectRead')) {
+                achievements.push({ id: 'perfectRead', title: '⭐ Perfect Reading!' });
+            }
+            
+            achievements.forEach(achievement => {
+                if (!sessionData.achievements.includes(achievement.id)) {
+                    sessionData.achievements.push(achievement.id);
+                    showAchievement(achievement.title);
+                }
+            });
+        }
+
+        function showAchievement(title) {
+            const achievementsContainer = document.getElementById('achievements');
+            
+            if (achievementsContainer.querySelector('.empty-state')) {
+                achievementsContainer.innerHTML = '';
+            }
+            
+            const achievementElement = document.createElement('div');
+            achievementElement.className = 'achievement';
+            achievementElement.textContent = title;
+            achievementsContainer.appendChild(achievementElement);
+        }
+
+        function startSpeedChallenge() {
+            alert('Speed Challenge: Read the current paragraph as fast as possible while maintaining accuracy! Timer starts when you click the first word.');
+            // Reset the current paragraph
+            const words = document.querySelectorAll('.word');
+            words.forEach(word => word.classList.remove('clicked'));
+            sessionData.clickedWords.clear();
+            sessionData.startTime = null;
+            if (timerInterval) clearInterval(timerInterval);
+            document.getElementById('timer').textContent = '00:00';
+            updateProgress();
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate initial content
+            setTimeout(() => {
+                generateParagraph();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
