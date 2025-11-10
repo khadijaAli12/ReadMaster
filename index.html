@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReadMaster - AI-Powered Reading Practice</title>
+    <title>WordMaster - Pronunciation & Meaning</title>
     <style>
         * {
             margin: 0;
@@ -12,599 +12,259 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             min-height: 100vh;
             color: #333;
-            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInDown 1s ease-out;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-30px); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .header h1 {
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             color: white;
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            font-weight: 700;
-            letter-spacing: -1px;
-            background: linear-gradient(45deg, #fff, #e0e7ff, #fff);
-            background-clip: text;
-            -webkit-background-clip: text;
-            animation: shimmer 3s infinite;
+            padding: 30px;
+            text-align: center;
         }
 
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
 
         .header p {
-            color: rgba(255,255,255,0.95);
-            font-size: 1.3rem;
-            font-weight: 400;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
 
-        .ai-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        .search-section {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
         }
 
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 340px;
-            gap: 40px;
-            align-items: start;
-        }
-
-        .reading-panel {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
-            animation: fadeInLeft 0.8s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .reading-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            animation: panelShimmer 8s infinite;
-        }
-
-        @keyframes panelShimmer {
-            0% { left: -100%; }
-            50% { left: 100%; }
-            100% { left: -100%; }
-        }
-
-        @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .controls {
+        .search-container {
             display: flex;
-            gap: 25px;
-            margin-bottom: 35px;
-            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
         }
 
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
         }
 
-        .control-group label {
-            font-weight: 600;
-            color: #4a5568;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        select, button {
-            padding: 14px 18px;
-            border: 2px solid rgba(102, 126, 234, 0.2);
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: white;
-        }
-
-        select {
-            cursor: pointer;
-            background: linear-gradient(145deg, #ffffff, #f8fafc);
-        }
-
-        select:focus, select:hover {
+        .search-input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-            transform: translateY(-1px);
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
         }
 
-        .generate-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .search-btn {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             color: white;
             border: none;
-            cursor: pointer;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1.1rem;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .generate-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .generate-btn:hover::before {
-            left: 100%;
-        }
-
-        .generate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-        }
-
-        .generate-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .generate-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .generate-btn.loading {
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
-        }
-
-        .reading-area {
-            background: linear-gradient(145deg, #f8fafc, #ffffff);
-            border-radius: 20px;
-            padding: 35px;
-            min-height: 300px;
-            margin-bottom: 25px;
-            border: 2px dashed rgba(102, 126, 234, 0.3);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .reading-area.has-content {
-            border: 2px solid rgba(102, 126, 234, 0.4);
-            background: linear-gradient(145deg, #ffffff, #f8fafc);
-            box-shadow: inset 0 2px 10px rgba(102, 126, 234, 0.05);
-        }
-
-        .paragraph {
-            font-size: 19px;
-            line-height: 1.9;
-            font-weight: 400;
-            letter-spacing: 0.3px;
-        }
-
-        .word {
             cursor: pointer;
-            padding: 4px 6px;
-            border-radius: 10px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            display: inline-block;
-            margin: 2px 1px;
-            position: relative;
-        }
-
-        .word:hover {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            transform: scale(1.08) translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-            z-index: 1;
-        }
-
-        .word.clicked {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .word.clicked:hover {
-            background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            transform: scale(1.05) translateY(-1px);
-        }
-
-        .pronunciation-display {
-            background: linear-gradient(145deg, #f0f9ff, #e0f2fe);
-            border: 2px solid #0ea5e9;
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 20px;
-            display: none;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(14, 165, 233, 0.2);
-        }
-
-        .pronunciation-display.show {
-            display: block;
-            animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            animation: fadeInRight 0.8s ease-out;
-        }
-
-        @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .sidebar-panel {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        .sidebar-panel::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.03), transparent);
-            transition: transform 0.6s;
-            transform: rotate(0deg);
-        }
-
-        .sidebar-panel:hover::before {
-            transform: rotate(180deg);
-        }
-
-        .sidebar-panel:hover {
+        .search-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.3);
         }
 
-        .sidebar-panel h3 {
-            color: #667eea;
-            margin-bottom: 18px;
-            font-size: 1.4rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: relative;
-            z-index: 1;
+        .search-btn:active {
+            transform: translateY(0);
         }
 
-        .progress-bar {
-            background: rgba(226, 232, 240, 0.8);
-            border-radius: 12px;
-            height: 14px;
-            margin: 15px 0;
-            overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-            position: relative;
+        .result-section {
+            padding: 30px;
+            display: none;
         }
 
-        .progress-fill {
-            background: linear-gradient(90deg, #10b981, #059669, #34d399);
-            height: 100%;
-            border-radius: 12px;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
-            position: relative;
-            overflow: hidden;
+        .result-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: progressShimmer 2s infinite;
-        }
-
-        @keyframes progressShimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .vocabulary-list {
-            max-height: 220px;
-            overflow-y: auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .vocabulary-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .vocabulary-list::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 10px;
-        }
-
-        .vocabulary-list::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, #667eea, #764ba2);
-            border-radius: 10px;
-        }
-
-        .vocab-item {
+        .word-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
-            background: linear-gradient(145deg, #f8fafc, #ffffff);
-            border-radius: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(102, 126, 234, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .vocab-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
-            transition: left 0.3s;
-        }
-
-        .vocab-item:hover::before {
-            left: 100%;
-        }
-
-        .vocab-item:hover {
-            background: linear-gradient(145deg, #667eea, #764ba2);
-            color: white;
-            transform: translateX(4px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .vocab-word {
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .vocab-item:hover .vocab-word,
-        .vocab-item:hover .vocab-pronunciation {
-            color: white;
-        }
-
-        .vocab-pronunciation {
-            font-size: 0.9rem;
-            color: #6b7280;
-            font-style: italic;
-        }
-
-        .achievement {
-            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-            color: white;
-            padding: 15px 18px;
-            border-radius: 14px;
-            margin: 8px 0;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.95rem;
-            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .achievement::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            animation: achievementSparkle 2s infinite;
-        }
-
-        @keyframes achievementSparkle {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.3) translateY(20px); }
-            50% { opacity: 1; transform: scale(1.05) translateY(-10px); }
-            70% { transform: scale(0.9) translateY(0); }
-            100% { transform: scale(1) translateY(0); }
-        }
-
-        .challenge-mode {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 18px;
-            text-align: center;
-            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .challenge-mode::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
-            animation: challengeGlow 3s infinite;
-        }
-
-        @keyframes challengeGlow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .challenge-mode > div:first-child {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .challenge-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.4);
-            padding: 12px 24px;
-            border-radius: 14px;
-            margin-top: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 1;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .challenge-btn:hover {
-            background: rgba(255,255,255,0.9);
-            color: #8b5cf6;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255,255,255,0.3);
-        }
-
-        .ai-status {
-            background: linear-gradient(145deg, #e0f2fe, #b3e5fc);
-            border: 2px solid #0ea5e9;
-            border-radius: 16px;
-            padding: 15px;
             margin-bottom: 20px;
-            text-align: center;
-            color: #0c4a6e;
-            font-weight: 500;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
         }
 
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .controls {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .reading-panel {
-                padding: 25px;
-            }
-            
-            .sidebar-panel {
-                padding: 20px;
-            }
+        .word-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .phonetic {
+            font-size: 1.2rem;
+            color: #6a11cb;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .audio-btn {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            background: #2575fc;
+        }
+
+        .meaning-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .definitions {
+            list-style-type: none;
+        }
+
+        .definition-item {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .definition-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #6a11cb;
+            font-size: 1.5rem;
+        }
+
+        .definition-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 5px;
+        }
+
+        .example {
+            font-style: italic;
+            color: #666;
+            padding-left: 15px;
+            border-left: 3px solid #e0e0e0;
+            margin-top: 8px;
+        }
+
+        .usage-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .usage-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .usage-examples {
+            list-style-type: none;
+        }
+
+        .usage-example {
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
         }
 
         .loading {
             text-align: center;
-            color: #6b7280;
-            font-style: italic;
-            font-size: 1.1rem;
-            animation: loadingPulse 2s infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            padding: 30px;
+            display: none;
         }
 
-        .loading::after {
-            content: '';
-            width: 20px;
-            height: 20px;
-            border: 2px solid #667eea;
-            border-top: 2px solid transparent;
+        .loading.active {
+            display: block;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e0e0e0;
+            border-top: 4px solid #6a11cb;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-        }
-
-        @keyframes loadingPulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
+            margin: 0 auto 15px;
         }
 
         @keyframes spin {
@@ -612,792 +272,238 @@
             100% { transform: rotate(360deg); }
         }
 
-        .empty-state {
+        .footer {
             text-align: center;
-            color: #6b7280;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            position: relative;
-            z-index: 1;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .stat-item {
-            background: linear-gradient(145deg, #f8fafc, #ffffff);
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid rgba(102, 126, 234, 0.1);
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #667eea;
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .search-container {
+                flex-direction: column;
+            }
+            
+            .word-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>ReadMaster</h1>
-            <p>AI-powered reading practice with intelligent content generation</p>
-            <div class="ai-badge">🤖 Free AI-Powered</div>
+            <h1>WordMaster</h1>
+            <p>Find pronunciation, meaning, and usage of any English word</p>
         </div>
 
-        <div class="main-content">
-            <div class="reading-panel">
-                <div class="ai-status">
-                    🚀 <strong>No API Key Required!</strong> Using free AI services and intelligent algorithms to generate personalized content.
-                </div>
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input" id="wordInput" placeholder="Enter any English word..." autocomplete="off">
+                <button class="search-btn" id="searchBtn">Search</button>
+            </div>
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Searching for word information...</p>
+            </div>
+            <div class="error-message" id="errorMessage">
+                <p>Sorry, we couldn't find information for that word. Please check your spelling or try another word.</p>
+            </div>
+        </div>
 
-                <div class="controls">
-                    <div class="control-group">
-                        <label for="topic">Topic</label>
-                        <select id="topic">
-                            <option value="technology">Technology</option>
-                            <option value="science">Science</option>
-                            <option value="nature">Nature</option>
-                            <option value="history">History</option>
-                            <option value="health">Health & Wellness</option>
-                            <option value="education">Education</option>
-                            <option value="entertainment">Entertainment</option>
-                            <option value="travel">Travel & Culture</option>
-                            <option value="food">Food & Cooking</option>
-                            <option value="sports">Sports & Fitness</option>
-                            <option value="environment">Environment</option>
-                            <option value="space">Space & Astronomy</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="difficulty">Reading Level</label>
-                        <select id="difficulty">
-                            <option value="elementary">Elementary (Ages 6-10)</option>
-                            <option value="middle">Middle School (Ages 11-13)</option>
-                            <option value="high">High School (Ages 14-17)</option>
-                            <option value="college">College Level</option>
-                            <option value="advanced">Advanced/Professional</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="style">Writing Style</label>
-                        <select id="style">
-                            <option value="informative">Informative</option>
-                            <option value="narrative">Story-telling</option>
-                            <option value="descriptive">Descriptive</option>
-                            <option value="analytical">Analytical</option>
-                            <option value="creative">Creative</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label>&nbsp;</label>
-                        <button class="generate-btn" onclick="generateParagraph()">
-                            Generate Smart Content
-                        </button>
-                    </div>
+        <div class="result-section" id="resultSection">
+            <div class="word-header">
+                <div>
+                    <h2 class="word-title" id="wordTitle">Word</h2>
+                    <div class="phonetic" id="phoneticText">/fəˈnetɪk/</div>
                 </div>
-
-                <div class="reading-area" id="readingArea">
-                    <div class="empty-state">
-                        <p>Select your preferences and click "Generate Smart Content" to start practicing with AI-generated content!</p>
-                    </div>
-                </div>
-
-                <div class="pronunciation-display" id="pronunciationDisplay">
-                    <strong id="currentWord"></strong>
-                    <div id="pronunciation"></div>
-                    <small>Click to hear pronunciation</small>
-                </div>
+                <button class="audio-btn" id="audioBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 3V21M8 8V16M16 6V18M20 4V20M4 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
             </div>
 
-            <div class="sidebar">
-                <div class="sidebar-panel">
-                    <h3>📊 Reading Progress</h3>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
-                    </div>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number" id="wordsCount">0</div>
-                            <div class="stat-label">Words Read</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="accuracyRate">0%</div>
-                            <div class="stat-label">Progress</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-panel">
-                    <h3>🎯 Smart Practice</h3>
-                    <div class="challenge-mode">
-                        <div>AI-Generated Content!</div>
-                        <div style="font-size: 0.9rem; margin-top: 5px; opacity: 0.9;">Fresh content every time</div>
-                        <button class="challenge-btn" onclick="generateParagraph()">New Content</button>
-                    </div>
-                </div>
-
-                <div class="sidebar-panel">
-                    <h3>📚 Smart Vocabulary</h3>
-                    <div class="vocabulary-list" id="vocabularyList">
-                        <div class="empty-state" style="padding: 20px;">
-                            <p>Click on difficult words while reading to save them here!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-panel">
-                    <h3>🏆 Achievements</h3>
-                    <div id="achievements">
-                        <div class="empty-state" style="padding: 20px;">
-                            <p>Start reading to unlock achievements!</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="meaning-section">
+                <h3 class="section-title">Meaning</h3>
+                <ul class="definitions" id="definitionsList">
+                    <!-- Definitions will be inserted here -->
+                </ul>
             </div>
+
+            <div class="usage-section">
+                <h3 class="usage-title">Usage Examples</h3>
+                <ul class="usage-examples" id="usageExamples">
+                    <!-- Usage examples will be inserted here -->
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>WordMaster &copy; 2023 | Powered by Free Dictionary API</p>
         </div>
     </div>
 
     <script>
-        // Global state
-        let sessionData = {
-            clickedWords: new Set(),
-            vocabulary: [],
-            achievements: [],
-            currentParagraphWords: 0,
-            contentHistory: new Set()
-        };
-
-        // Advanced AI Content Generator using multiple free services and algorithms
-        class AIContentGenerator {
-            constructor() {
-                this.templates = this.initializeTemplates();
-                this.vocabularyLevels = this.initializeVocabulary();
-                this.sentencePatterns = this.initializeSentencePatterns();
-            }
-
-            // Try multiple free AI services with fallbacks
-            async generateContent(topic, difficulty, style) {
-                const methods = [
-                    () => this.tryHuggingFaceAPI(topic, difficulty, style),
-                    () => this.tryPublicAPI(topic, difficulty, style),
-                    () => this.generateAlgorithmic(topic, difficulty, style),
-                    () => this.generateFromTemplate(topic, difficulty, style)
-                ];
-
-                for (const method of methods) {
-                    try {
-                        const result = await method();
-                        if (result && result.length > 50) {
-                            return this.enhanceContent(result, difficulty);
-                        }
-                    } catch (error) {
-                        console.log(`Method failed, trying next: ${error.message}`);
-                        continue;
-                    }
-                }
-
-                // Final fallback
-                return this.generateFromTemplate(topic, difficulty, style);
-            }
-
-            // Try Hugging Face's free inference API
-            async tryHuggingFaceAPI(topic, difficulty, style) {
-                const prompt = this.createPrompt(topic, difficulty, style);
-                
-                const response = await fetch('https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        inputs: prompt,
-                        parameters: {
-                            max_length: 150,
-                            temperature: 0.8,
-                            do_sample: true
-                        }
-                    })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data[0] && data[0].generated_text) {
-                        return this.cleanGeneratedText(data[0].generated_text);
-                    }
-                }
-                throw new Error('Hugging Face API failed');
-            }
-
-            // Try other public AI APIs
-            async tryPublicAPI(topic, difficulty, style) {
-                // This would use other free APIs like OpenAI alternatives
-                // For now, we'll simulate this with a realistic delay and algorithmic generation
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                return this.generateAlgorithmic(topic, difficulty, style);
-            }
-
-            // Advanced algorithmic content generation
-            async generateAlgorithmic(topic, difficulty, style) {
-                await new Promise(resolve => setTimeout(resolve, 800));
-                
-                const topicData = this.templates[topic];
-                const difficultyLevel = this.vocabularyLevels[difficulty];
-                const sentences = [];
-
-                // Generate 3-5 sentences based on complexity
-                const sentenceCount = difficulty === 'elementary' ? 3 : 
-                                    difficulty === 'middle' ? 4 : 5;
-
-                for (let i = 0; i < sentenceCount; i++) {
-                    const sentence = this.generateSentence(topic, difficulty, style, i, sentenceCount);
-                    sentences.push(sentence);
-                }
-
-                return sentences.join(' ');
-            }
-
-            generateSentence(topic, difficulty, style, index, total) {
-                const topicData = this.templates[topic];
-                const concepts = topicData.concepts;
-                const actions = topicData.actions;
-                const descriptors = topicData.descriptors;
-                
-                const difficultyWords = this.vocabularyLevels[difficulty];
-                const patterns = this.sentencePatterns[style];
-                
-                // Select pattern based on sentence position
-                const patternIndex = index % patterns.length;
-                const pattern = patterns[patternIndex];
-                
-                // Fill pattern with topic-specific content
-                return this.fillPattern(pattern, {
-                    concept: this.randomChoice(concepts),
-                    action: this.randomChoice(actions),
-                    descriptor: this.randomChoice(descriptors),
-                    difficultyWord: this.randomChoice(difficultyWords),
-                    topic: topic
-                });
-            }
-
-            fillPattern(pattern, data) {
-                return pattern
-                    .replace('{concept}', data.concept)
-                    .replace('{action}', data.action)
-                    .replace('{descriptor}', data.descriptor)
-                    .replace('{difficultyWord}', data.difficultyWord)
-                    .replace('{topic}', data.topic);
-            }
-
-            randomChoice(array) {
-                return array[Math.floor(Math.random() * array.length)];
-            }
-
-            // Fallback template-based generation
-            generateFromTemplate(topic, difficulty, style) {
-                const templates = this.getTemplatesForTopic(topic, difficulty);
-                let content = this.randomChoice(templates);
-                
-                // Add style-specific modifications
-                content = this.applyStyle(content, style);
-                
-                // Ensure uniqueness
-                let attempts = 0;
-                while (sessionData.contentHistory.has(content) && attempts < 10) {
-                    content = this.randomChoice(templates);
-                    content = this.applyStyle(content, style);
-                    attempts++;
-                }
-                
-                sessionData.contentHistory.add(content);
-                return content;
-            }
-
-            applyStyle(content, style) {
-                const styleModifications = {
-                    'narrative': content => content.replace(/\. /g, ', and then ').replace(/Scientists/g, 'Researchers'),
-                    'descriptive': content => content.replace(/is /g, 'appears to be ').replace(/are /g, 'seem to be '),
-                    'analytical': content => content.replace(/\. /g, '. Furthermore, ').replace(/because/g, 'due to the fact that'),
-                    'creative': content => content.replace(/The /g, 'Imagine the ').replace(/Scientists/g, 'Brilliant minds'),
-                    'informative': content => content // Keep as is
-                };
-
-                return styleModifications[style] ? styleModifications[style](content) : content;
-            }
-
-            enhanceContent(content, difficulty) {
-                // Add difficulty-appropriate vocabulary
-                const enhancements = this.vocabularyLevels[difficulty];
-                
-                // Replace simple words with more appropriate ones
-                let enhanced = content;
-                if (difficulty === 'advanced') {
-                    enhanced = enhanced.replace(/big/g, 'substantial');
-                    enhanced = enhanced.replace(/good/g, 'beneficial');
-                    enhanced = enhanced.replace(/bad/g, 'detrimental');
-                } else if (difficulty === 'elementary') {
-                    enhanced = enhanced.replace(/substantial/g, 'big');
-                    enhanced = enhanced.replace(/beneficial/g, 'good');
-                    enhanced = enhanced.replace(/detrimental/g, 'bad');
-                }
-                
-                return enhanced;
-            }
-
-            cleanGeneratedText(text) {
-                return text
-                    .replace(/\n/g, ' ')
-                    .replace(/\s+/g, ' ')
-                    .trim()
-                    .replace(/[^\w\s.,!?;:-]/g, '');
-            }
-
-            createPrompt(topic, difficulty, style) {
-                return `Write a ${style} paragraph about ${topic} for ${difficulty} level readers. Make it educational and engaging.`;
-            }
-
-            initializeTemplates() {
-                return {
-                    technology: {
-                        concepts: ['artificial intelligence', 'smartphones', 'computers', 'internet', 'robotics', 'virtual reality'],
-                        actions: ['transforms', 'connects', 'processes', 'analyzes', 'creates', 'facilitates'],
-                        descriptors: ['innovative', 'revolutionary', 'advanced', 'cutting-edge', 'sophisticated', 'efficient']
-                    },
-                    science: {
-                        concepts: ['experiments', 'discoveries', 'research', 'molecules', 'ecosystems', 'phenomena'],
-                        actions: ['investigates', 'discovers', 'analyzes', 'explores', 'reveals', 'demonstrates'],
-                        descriptors: ['fascinating', 'complex', 'remarkable', 'intricate', 'mysterious', 'groundbreaking']
-                    },
-                    nature: {
-                        concepts: ['wildlife', 'forests', 'oceans', 'mountains', 'ecosystems', 'biodiversity'],
-                        actions: ['thrives', 'adapts', 'survives', 'evolves', 'flourishes', 'interacts'],
-                        descriptors: ['magnificent', 'diverse', 'resilient', 'beautiful', 'endangered', 'abundant']
-                    },
-                    history: {
-                        concepts: ['civilizations', 'events', 'cultures', 'empires', 'traditions', 'discoveries'],
-                        actions: ['influenced', 'shaped', 'transformed', 'preserved', 'documented', 'remembered'],
-                        descriptors: ['ancient', 'significant', 'influential', 'legendary', 'pivotal', 'memorable']
-                    },
-                    health: {
-                        concepts: ['nutrition', 'exercise', 'wellness', 'medicine', 'lifestyle', 'prevention'],
-                        actions: ['improves', 'strengthens', 'protects', 'enhances', 'maintains', 'supports'],
-                        descriptors: ['healthy', 'beneficial', 'essential', 'important', 'effective', 'vital']
-                    },
-                    education: {
-                        concepts: ['learning', 'knowledge', 'skills', 'creativity', 'critical thinking', 'collaboration'],
-                        actions: ['develops', 'teaches', 'inspires', 'cultivates', 'encourages', 'fosters'],
-                        descriptors: ['valuable', 'essential', 'enriching', 'comprehensive', 'engaging', 'transformative']
-                    },
-                    entertainment: {
-                        concepts: ['movies', 'music', 'games', 'stories', 'performances', 'creativity'],
-                        actions: ['entertains', 'inspires', 'captivates', 'amuses', 'delights', 'engages'],
-                        descriptors: ['exciting', 'enjoyable', 'captivating', 'thrilling', 'amusing', 'spectacular']
-                    },
-                    travel: {
-                        concepts: ['cultures', 'destinations', 'adventures', 'experiences', 'traditions', 'landscapes'],
-                        actions: ['explores', 'discovers', 'experiences', 'visits', 'appreciates', 'encounters'],
-                        descriptors: ['exotic', 'beautiful', 'memorable', 'diverse', 'enchanting', 'breathtaking']
-                    },
-                    food: {
-                        concepts: ['cuisines', 'flavors', 'ingredients', 'cooking', 'nutrition', 'traditions'],
-                        actions: ['nourishes', 'satisfies', 'combines', 'creates', 'prepares', 'enhances'],
-                        descriptors: ['delicious', 'nutritious', 'flavorful', 'aromatic', 'fresh', 'wholesome']
-                    },
-                    sports: {
-                        concepts: ['athletes', 'competitions', 'training', 'teamwork', 'fitness', 'performance'],
-                        actions: ['competes', 'trains', 'performs', 'achieves', 'excels', 'participates'],
-                        descriptors: ['athletic', 'competitive', 'disciplined', 'skillful', 'determined', 'inspiring']
-                    },
-                    environment: {
-                        concepts: ['sustainability', 'conservation', 'pollution', 'climate', 'resources', 'ecosystems'],
-                        actions: ['protects', 'preserves', 'sustains', 'reduces', 'conserves', 'maintains'],
-                        descriptors: ['sustainable', 'renewable', 'eco-friendly', 'responsible', 'green', 'conservation-minded']
-                    },
-                    space: {
-                        concepts: ['planets', 'stars', 'galaxies', 'exploration', 'astronauts', 'discoveries'],
-                        actions: ['explores', 'orbits', 'discovers', 'investigates', 'travels', 'observes'],
-                        descriptors: ['vast', 'mysterious', 'infinite', 'fascinating', 'distant', 'spectacular']
-                    }
-                };
-            }
-
-            initializeVocabulary() {
-                return {
-                    elementary: ['big', 'good', 'nice', 'fun', 'easy', 'hard', 'fast', 'slow', 'happy', 'sad'],
-                    middle: ['important', 'interesting', 'difficult', 'amazing', 'creative', 'helpful', 'popular', 'modern'],
-                    high: ['significant', 'fascinating', 'challenging', 'innovative', 'comprehensive', 'beneficial', 'contemporary'],
-                    college: ['substantial', 'intriguing', 'complex', 'revolutionary', 'analytical', 'advantageous', 'sophisticated'],
-                    advanced: ['profound', 'multifaceted', 'intricate', 'paradigmatic', 'comprehensive', 'transformative', 'unprecedented']
-                };
-            }
-
-            initializeSentencePatterns() {
-                return {
-                    informative: [
-                        '{concept} {action} our understanding of {topic} in {descriptor} ways.',
-                        'Research shows that {concept} can {action} {descriptor} outcomes.',
-                        'The study of {concept} reveals {descriptor} patterns in {topic}.'
-                    ],
-                    narrative: [
-                        'Once upon a time, {concept} began to {action} the world of {topic}.',
-                        'The story of {concept} shows how it {action} {descriptor} changes.',
-                        'Through time, {concept} has continued to {action} and inspire people.'
-                    ],
-                    descriptive: [
-                        'The {descriptor} nature of {concept} {action} the field of {topic}.',
-                        '{concept} appears {descriptor} when it {action} with other elements.',
-                        'Observing {concept}, we see how it {action} in {descriptor} patterns.'
-                    ],
-                    analytical: [
-                        'Analysis of {concept} demonstrates how it {action} {descriptor} results.',
-                        'The relationship between {concept} and {topic} {action} {descriptor} implications.',
-                        'Critical examination shows that {concept} {action} through {descriptor} mechanisms.'
-                    ],
-                    creative: [
-                        'Imagine if {concept} could {action} the entire world of {topic}!',
-                        'Picture a world where {concept} {action} everything in {descriptor} ways.',
-                        'What if {concept} had the power to {action} and transform {topic}?'
-                    ]
-                };
-            }
-
-            getTemplatesForTopic(topic, difficulty) {
-                const allTemplates = {
-                    technology: {
-                        elementary: [
-                            'Computers help us do many things every day. They can play games, show videos, and help us learn new things. Smart phones let us talk to friends anywhere in the world. Technology makes life easier and more fun for everyone.',
-                            'Robots are machines that can move and do jobs. Some robots clean houses while others help doctors. They have computers inside that tell them what to do. Scientists keep making robots smarter and more helpful.',
-                            'The internet connects computers all around the world. We can find information about anything we want to know. People use it to send messages and share pictures. It helps us learn and stay connected with friends.'
-                        ],
-                        middle: [
-                            'Artificial intelligence is changing how computers work and think. These smart systems can learn from information and make decisions like humans do. AI helps doctors find diseases and helps cars drive themselves. This technology is becoming part of our daily lives.',
-                            'Virtual reality creates fake worlds that feel real when you wear special glasses. People can visit ancient Rome or swim with dolphins without leaving their room. VR is used for games, education, and training in many different jobs.',
-                            'Smartphones have more computing power than the computers that sent people to the moon. They contain tiny sensors that detect motion, location, and light. These devices have revolutionized communication and put the world\'s information in our pockets.'
-                        ],
-                        high: [
-                            'Machine learning algorithms analyze vast amounts of data to identify patterns and make predictions. These systems improve their performance over time without explicit programming. From recommendation systems to autonomous vehicles, machine learning is transforming industries and creating new possibilities.',
-                            'Quantum computing represents a fundamental shift in how we process information. Unlike traditional computers that use binary bits, quantum computers use quantum bits that can exist in multiple states simultaneously. This could revolutionize cryptography, drug discovery, and complex problem-solving.',
-                            'The Internet of Things connects everyday objects to the internet, creating smart environments that respond to our needs. Sensors in homes, cities, and vehicles collect data to optimize energy use, traffic flow, and security systems.'
-                        ],
-                        college: [
-                            'Distributed computing architectures enable massive scalability by processing data across multiple interconnected systems. Cloud computing platforms provide on-demand access to computational resources, fundamentally changing how organizations deploy and manage applications. This paradigm shift has democratized access to powerful computing capabilities.',
-                            'Cybersecurity frameworks employ advanced encryption algorithms and behavioral analysis to protect digital assets from sophisticated threats. Multi-factor authentication, zero-trust architectures, and artificial intelligence-driven threat detection create layered defense systems that adapt to evolving security challenges.',
-                            'Blockchain technology creates immutable, decentralized ledgers that eliminate the need for traditional intermediaries in various transactions. Smart contracts automate complex agreements, while distributed consensus mechanisms ensure network integrity without centralized control.'
-                        ],
-                        advanced: [
-                            'Neuromorphic computing architectures emulate biological neural networks to achieve unprecedented energy efficiency in pattern recognition and adaptive learning tasks. These brain-inspired systems leverage spike-based processing and synaptic plasticity to enable real-time learning and decision-making in resource-constrained environments.',
-                            'Edge computing paradigms redistribute computational workloads to network peripheries, minimizing latency while ensuring data locality and privacy preservation. This architectural evolution enables autonomous systems, real-time analytics, and distributed intelligence across heterogeneous computing environments.',
-                            'Quantum supremacy demonstrations reveal the potential for exponential computational advantages in specific problem domains, including cryptographic systems, optimization algorithms, and molecular simulation. These breakthrough achievements herald a new era of computational possibilities.'
-                        ]
-                    },
-                    science: {
-                        elementary: [
-                            'Plants need sunlight, water, and air to grow big and strong. They make their own food using these things in a process called photosynthesis. The green color in leaves helps them catch sunlight. Without plants, animals and people could not survive.',
-                            'The human body has many amazing parts that work together. Your heart pumps blood to every part of your body. Your brain controls everything you think and do. Your bones are strong and help you stand up and move around.',
-                            'Animals live in different places around the world called habitats. Polar bears live where it\'s cold and snowy. Fish live in water and breathe through gills. Each animal has special features that help it survive where it lives.'
-                        ],
-                        middle: [
-                            'DNA contains the instructions that make each living thing unique. Scientists can study DNA to understand how traits pass from parents to their children. This genetic code determines everything from eye color to height. Medical researchers use DNA knowledge to develop new treatments for diseases.',
-                            'The water cycle moves water around the Earth through evaporation, condensation, and precipitation. When the sun heats oceans and rivers, water turns into invisible vapor that rises into the sky. This vapor forms clouds that eventually release rain or snow.',
-                            'Chemical reactions happen when different substances combine to create something new. Baking a cake involves chemical reactions that change flour, eggs, and sugar into something completely different. These reactions can release energy as heat or light.'
-                        ],
-                        high: [
-                            'Genetic engineering techniques allow scientists to modify organisms by inserting, deleting, or changing specific DNA sequences. CRISPR technology has revolutionized this field by providing precise tools for genome editing. These advances hold promise for treating genetic diseases and improving crop yields.',
-                            'Climate change results from increased greenhouse gas concentrations in the atmosphere, primarily from human activities. Rising global temperatures affect weather patterns, sea levels, and ecosystem stability. Understanding these complex interactions is crucial for developing effective mitigation strategies.',
-                            'Cellular respiration converts glucose and oxygen into energy that cells can use for vital functions. This process occurs in mitochondria and involves multiple enzymatic reactions. The efficiency of cellular respiration determines an organism\'s metabolic capacity and survival ability.'
-                        ],
-                        college: [
-                            'Epigenetic modifications regulate gene expression without altering the underlying DNA sequence, providing mechanisms for environmental influences on phenotype. These heritable changes involve DNA methylation and histone modifications that can persist across generations, fundamentally changing our understanding of inheritance.',
-                            'Protein folding dynamics determine functional conformations through complex interactions between amino acid residues and environmental factors. Misfolded proteins contribute to neurodegenerative diseases, while understanding folding mechanisms enables rational drug design and therapeutic interventions.',
-                            'Evolutionary biology reveals how natural selection shapes organism characteristics through differential reproductive success. Molecular phylogenetics provides insights into species relationships and evolutionary timescales, while population genetics explains allele frequency changes in response to selection pressures.'
-                        ],
-                        advanced: [
-                            'Quantum biology investigates quantum mechanical phenomena in biological systems, including coherent energy transfer in photosynthesis and quantum effects in enzyme catalysis. These discoveries challenge classical biophysical models and suggest quantum optimization strategies in evolutionary processes.',
-                            'Systems biology integrates multi-omics data to understand complex biological networks and emergent properties. Computational models predict system-level responses to perturbations, enabling personalized medicine approaches and synthetic biology applications.',
-                            'Astrobiology explores the potential for life beyond Earth by studying extremophiles and planetary conditions that could support biological processes. This interdisciplinary field combines planetary science, biochemistry, and evolutionary biology to assess habitability criteria.'
-                        ]
-                    }
-                    // Add more topics here following the same pattern...
-                };
-
-                return allTemplates[topic]?.[difficulty] || allTemplates.technology[difficulty];
-            }
-        }
-
-        // Initialize AI Content Generator
-        const aiGenerator = new AIContentGenerator();
-
-        // Enhanced pronunciation dictionary
-        const pronunciations = {
-            'artificial': 'ar-tuh-FISH-uhl',
-            'intelligence': 'in-TEL-uh-juhns',
-            'technology': 'tek-NOL-uh-jee',
-            'photosynthesis': 'foh-tuh-SIN-thuh-sis',
-            'ecosystem': 'EE-koh-sis-tuhm',
-            'biodiversity': 'bahy-oh-dih-VUR-si-tee',
-            'algorithm': 'AL-guh-rith-uhm',
-            'quantum': 'KWAN-tuhm',
-            'revolutionary': 'rev-uh-LOO-shuh-ner-ee',
-            'sophisticated': 'suh-FIS-ti-kay-tid',
-            'extraordinary': 'ik-STRAWR-dn-er-ee',
-            'magnificent': 'mag-NIF-uh-suhnt',
-            'fascinating': 'FAS-uh-nay-ting',
-            'environment': 'en-VAHY-ruhn-muhnt',
-            'sustainability': 'suh-stay-nuh-BIL-i-tee',
-            'civilization': 'siv-uh-luh-ZAY-shun',
-            'architecture': 'AHR-ki-tek-cher',
-            'opportunity': 'op-er-TOO-ni-tee',
-            'communication': 'kuh-myoo-ni-KAY-shun',
-            'responsibility': 'ri-spon-suh-BIL-i-tee'
-        };
-
-        // Main content generation function
-        async function generateParagraph() {
-            const topic = document.getElementById('topic').value;
-            const difficulty = document.getElementById('difficulty').value;
-            const style = document.getElementById('style').value;
-            const readingArea = document.getElementById('readingArea');
-            const generateBtn = document.querySelector('.generate-btn');
-            
-            // Show loading state
-            generateBtn.classList.add('loading');
-            generateBtn.disabled = true;
-            generateBtn.textContent = 'AI Generating...';
-            
-            readingArea.innerHTML = '<div class="loading">🤖 AI is creating personalized content...</div>';
-            
-            try {
-                const content = await aiGenerator.generateContent(topic, difficulty, style);
-                displayParagraph(content);
-                readingArea.classList.add('has-content');
-                
-                // Reset session data for new paragraph
-                sessionData.clickedWords.clear();
-                sessionData.currentParagraphWords = content.split(' ').length;
-                updateProgress();
-                
-                // Show generation success
-                setTimeout(() => {
-                    showAchievement('🎯 New AI Content Generated!');
-                }, 500);
-                
-            } catch (error) {
-                console.error('Error generating AI content:', error);
-                readingArea.innerHTML = `
-                    <div style="background: linear-gradient(145deg, #fee2e2, #fecaca); border: 2px solid #f87171; color: #dc2626; padding: 20px; border-radius: 16px; text-align: center; font-weight: 500;">
-                        Sorry, there was an error generating content. Please try again!
-                        <br><small style="margin-top: 10px; display: block;">The AI system is working to provide you with the best content.</small>
-                    </div>
-                `;
-            } finally {
-                // Reset button state
-                generateBtn.classList.remove('loading');
-                generateBtn.disabled = false;
-                generateBtn.textContent = 'Generate Smart Content';
-            }
-        }
-
-        function displayParagraph(text) {
-            const readingArea = document.getElementById('readingArea');
-            const words = text.split(' ');
-            
-            const paragraph = document.createElement('div');
-            paragraph.className = 'paragraph';
-            
-            words.forEach((word, index) => {
-                const cleanWord = word.replace(/[.,!?;:"()]/g, '');
-                const wordSpan = document.createElement('span');
-                wordSpan.className = 'word';
-                wordSpan.textContent = word;
-                wordSpan.dataset.word = cleanWord.toLowerCase();
-                wordSpan.onclick = () => pronounceWord(wordSpan, cleanWord);
-                paragraph.appendChild(wordSpan);
-                
-                if (index < words.length - 1) {
-                    paragraph.appendChild(document.createTextNode(' '));
-                }
-            });
-            
-            readingArea.innerHTML = '';
-            readingArea.appendChild(paragraph);
-        }
-
-        function pronounceWord(wordElement, word) {
-            // Mark word as clicked
-            wordElement.classList.add('clicked');
-            sessionData.clickedWords.add(word.toLowerCase());
-            updateProgress();
-            
-            // Show pronunciation
-            const pronunciationDisplay = document.getElementById('pronunciationDisplay');
-            const currentWord = document.getElementById('currentWord');
-            const pronunciation = document.getElementById('pronunciation');
-            
-            currentWord.textContent = word;
-            pronunciation.textContent = `/${pronunciations[word.toLowerCase()] || generatePhoneticPronunciation(word)}/`;
-            pronunciationDisplay.classList.add('show');
-            
-            // Text-to-speech
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(word);
-                utterance.rate = 0.6;
-                utterance.pitch = 1.0;
-                utterance.volume = 0.8;
-                speechSynthesis.speak(utterance);
-            }
-            
-            // Save complex words to vocabulary
-            if (shouldSaveToVocabulary(word)) {
-                saveToVocabulary(word);
-            }
-            
-            // Hide pronunciation after 4 seconds
-            setTimeout(() => {
-                pronunciationDisplay.classList.remove('show');
-            }, 4000);
-        }
-
-        function generatePhoneticPronunciation(word) {
-            return word.toLowerCase().replace(/[^a-z]/g, '').split('').map(char => {
-                const phoneticMap = {
-                    'a': 'ay', 'e': 'ee', 'i': 'ahy', 'o': 'oh', 'u': 'oo',
-                    'y': 'wahy', 'c': 'see', 'g': 'jee', 'j': 'jay'
-                };
-                return phoneticMap[char] || char;
-            }).join('-');
-        }
-
-        function shouldSaveToVocabulary(word) {
-            const cleanWord = word.toLowerCase().replace(/[^a-z]/g, '');
-            return cleanWord.length > 6 && !sessionData.vocabulary.some(v => v.word.toLowerCase() === cleanWord);
-        }
-
-        function saveToVocabulary(word) {
-            const cleanWord = word.replace(/[^a-zA-Z]/g, '');
-            sessionData.vocabulary.push({
-                word: cleanWord,
-                pronunciation: pronunciations[cleanWord.toLowerCase()] || generatePhoneticPronunciation(cleanWord),
-                topic: document.getElementById('topic').value
-            });
-            updateVocabulary();
-        }
-
-        function updateProgress() {
-            const wordsRead = sessionData.clickedWords.size;
-            const totalWords = sessionData.currentParagraphWords || document.querySelectorAll('.word').length;
-            
-            const progress = totalWords > 0 ? (wordsRead / totalWords) * 100 : 0;
-            document.getElementById('progressFill').style.width = Math.min(progress, 100) + '%';
-            
-            document.getElementById('wordsCount').textContent = wordsRead;
-            document.getElementById('accuracyRate').textContent = Math.round(progress) + '%';
-            
-            checkAchievements();
-        }
-
-        function updateVocabulary() {
-            const vocabularyList = document.getElementById('vocabularyList');
-            
-            if (sessionData.vocabulary.length === 0) {
-                vocabularyList.innerHTML = '<div class="empty-state" style="padding: 20px;"><p>Click on difficult words while reading to save them here!</p></div>';
-                return;
-            }
-            
-            vocabularyList.innerHTML = '';
-            sessionData.vocabulary.slice(-8).reverse().forEach(item => {
-                const vocabItem = document.createElement('div');
-                vocabItem.className = 'vocab-item';
-                vocabItem.innerHTML = `
-                    <span class="vocab-word">${item.word}</span>
-                    <span class="vocab-pronunciation">/${item.pronunciation}/</span>
-                `;
-                vocabItem.onclick = () => {
-                    if ('speechSynthesis' in window) {
-                        const utterance = new SpeechSynthesisUtterance(item.word);
-                        speechSynthesis.speak(utterance);
-                    }
-                };
-                vocabularyList.appendChild(vocabItem);
-            });
-        }
-
-        function checkAchievements() {
-            const achievements = [];
-            const wordsRead = sessionData.clickedWords.size;
-            
-            if (wordsRead >= 10 && !sessionData.achievements.includes('first10')) {
-                achievements.push({ id: 'first10', title: '🎉 First 10 Words!' });
-            }
-            if (wordsRead >= 25 && !sessionData.achievements.includes('quarter')) {
-                achievements.push({ id: 'quarter', title: '🚀 Quarter Century!' });
-            }
-            if (wordsRead >= 50 && !sessionData.achievements.includes('half')) {
-                achievements.push({ id: 'half', title: '📚 Half Century!' });
-            }
-            if (sessionData.vocabulary.length >= 5 && !sessionData.achievements.includes('vocab')) {
-                achievements.push({ id: 'vocab', title: '🔤 Vocabulary Builder!' });
-            }
-            
-            achievements.forEach(achievement => {
-                if (!sessionData.achievements.includes(achievement.id)) {
-                    sessionData.achievements.push(achievement.id);
-                    showAchievement(achievement.title);
-                }
-            });
-        }
-
-        function showAchievement(title) {
-            const achievementsContainer = document.getElementById('achievements');
-            
-            if (achievementsContainer.querySelector('.empty-state')) {
-                achievementsContainer.innerHTML = '';
-            }
-            
-            const achievementElement = document.createElement('div');
-            achievementElement.className = 'achievement';
-            achievementElement.textContent = title;
-            achievementsContainer.appendChild(achievementElement);
-        }
-
-        // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            // Generate initial content
-            setTimeout(() => {
-                generateParagraph();
-            }, 1000);
+            const wordInput = document.getElementById('wordInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const resultSection = document.getElementById('resultSection');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const errorMessage = document.getElementById('errorMessage');
+            const wordTitle = document.getElementById('wordTitle');
+            const phoneticText = document.getElementById('phoneticText');
+            const audioBtn = document.getElementById('audioBtn');
+            const definitionsList = document.getElementById('definitionsList');
+            const usageExamples = document.getElementById('usageExamples');
 
-            // Show tips
-            setTimeout(() => {
-                const tips = [
-                    "🤖 No API keys needed - everything works offline!",
-                    "🎯 AI adapts content to your reading level",
-                    "📚 Try different topics and styles for variety",
-                    "🔊 Click any word to hear pronunciation"
-                ];
+            // Focus on input field when page loads
+            wordInput.focus();
+
+            // Search when button is clicked
+            searchBtn.addEventListener('click', searchWord);
+
+            // Search when Enter key is pressed
+            wordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchWord();
+                }
+            });
+
+            function searchWord() {
+                const word = wordInput.value.trim().toLowerCase();
                 
-                let tipIndex = 0;
-                const showTip = () => {
-                    if (tipIndex < tips.length) {
-                        showAchievement(tips[tipIndex]);
-                        tipIndex++;
-                        setTimeout(showTip, 3000);
+                if (!word) {
+                    showError("Please enter a word to search");
+                    return;
+                }
+
+                // Show loading, hide results and error
+                loadingIndicator.classList.add('active');
+                resultSection.classList.remove('active');
+                errorMessage.classList.remove('active');
+
+                // Fetch word data from API
+                fetchWordData(word);
+            }
+
+            async function fetchWordData(word) {
+                try {
+                    const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
+                    
+                    if (!response.ok) {
+                        throw new Error('Word not found');
                     }
-                };
-                setTimeout(showTip, 2000);
-            }, 1000);
+                    
+                    const data = await response.json();
+                    displayWordData(data[0]);
+                    
+                } catch (error) {
+                    console.error('Error fetching word data:', error);
+                    showError("Word not found. Please check your spelling.");
+                } finally {
+                    loadingIndicator.classList.remove('active');
+                }
+            }
+
+            function displayWordData(wordData) {
+                // Set word title
+                wordTitle.textContent = wordData.word;
+                
+                // Set phonetic text
+                if (wordData.phonetic) {
+                    phoneticText.textContent = wordData.phonetic;
+                } else if (wordData.phonetics && wordData.phonetics.length > 0) {
+                    // Find the first phonetic that has text
+                    const phonetic = wordData.phonetics.find(p => p.text);
+                    phoneticText.textContent = phonetic ? phonetic.text : '/phonetic not available/';
+                } else {
+                    phoneticText.textContent = '/phonetic not available/';
+                }
+                
+                // Set audio button
+                if (wordData.phonetics && wordData.phonetics.length > 0) {
+                    // Find the first phonetic that has audio
+                    const audioPhonetic = wordData.phonetics.find(p => p.audio);
+                    if (audioPhonetic && audioPhonetic.audio) {
+                        audioBtn.onclick = () => {
+                            const audio = new Audio(audioPhonetic.audio);
+                            audio.play();
+                        };
+                        audioBtn.style.display = 'flex';
+                    } else {
+                        audioBtn.style.display = 'none';
+                    }
+                } else {
+                    audioBtn.style.display = 'none';
+                }
+                
+                // Clear previous definitions
+                definitionsList.innerHTML = '';
+                
+                // Add definitions
+                if (wordData.meanings && wordData.meanings.length > 0) {
+                    wordData.meanings.forEach(meaning => {
+                        const partOfSpeech = meaning.partOfSpeech;
+                        
+                        meaning.definitions.forEach((def, index) => {
+                            const definitionItem = document.createElement('li');
+                            definitionItem.className = 'definition-item';
+                            
+                            let definitionHTML = `<div class="definition-text"><strong>${partOfSpeech}:</strong> ${def.definition}</div>`;
+                            
+                            if (def.example) {
+                                definitionHTML += `<div class="example">Example: "${def.example}"</div>`;
+                            }
+                            
+                            definitionItem.innerHTML = definitionHTML;
+                            definitionsList.appendChild(definitionItem);
+                        });
+                    });
+                } else {
+                    definitionsList.innerHTML = '<li class="definition-item">No definitions available</li>';
+                }
+                
+                // Clear previous usage examples
+                usageExamples.innerHTML = '';
+                
+                // Add usage examples (we'll use the first few definitions' examples)
+                let exampleCount = 0;
+                if (wordData.meanings && wordData.meanings.length > 0) {
+                    wordData.meanings.forEach(meaning => {
+                        meaning.definitions.forEach(def => {
+                            if (def.example && exampleCount < 5) {
+                                const exampleItem = document.createElement('li');
+                                exampleItem.className = 'usage-example';
+                                exampleItem.textContent = def.example;
+                                usageExamples.appendChild(exampleItem);
+                                exampleCount++;
+                            }
+                        });
+                    });
+                }
+                
+                // If no examples found, show a message
+                if (exampleCount === 0) {
+                    usageExamples.innerHTML = '<li class="usage-example">No usage examples available</li>';
+                }
+                
+                // Show results
+                resultSection.classList.add('active');
+            }
+
+            function showError(message) {
+                errorMessage.querySelector('p').textContent = message;
+                errorMessage.classList.add('active');
+                resultSection.classList.remove('active');
+            }
         });
     </script>
 </body>
