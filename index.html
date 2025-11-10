@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiPro - Advanced Reading & Pronunciation</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>LexiPro | Pronunciation & Reading</title>
     <style>
         * {
             margin: 0;
@@ -18,27 +17,24 @@
             --accent: #3498db;
             --accent-light: #5dade2;
             --success: #2ecc71;
-            --warning: #f39c12;
             --text: #2c3e50;
             --text-light: #7f8c8d;
-            --bg: #ecf0f1;
+            --bg: #f8f9fa;
             --card-bg: #ffffff;
-            --border: #d5dbdb;
+            --border: #e9ecef;
             --shadow: rgba(0, 0, 0, 0.08);
-            --shadow-hover: rgba(0, 0, 0, 0.12);
         }
 
         body {
             font-family: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            background: var(--bg);
             min-height: 100vh;
             color: var(--text);
-            overflow-x: hidden;
             line-height: 1.6;
         }
 
         .container {
-            max-width: 1300px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 30px;
         }
@@ -56,563 +52,105 @@
 
         .header h1 {
             color: var(--primary);
-            font-size: 3.2rem;
+            font-size: 2.8rem;
             margin-bottom: 15px;
             font-weight: 700;
             letter-spacing: -1px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .header h1::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(to right, var(--accent), var(--accent-light));
-            border-radius: 2px;
         }
 
         .header p {
             color: var(--text-light);
-            font-size: 1.2rem;
-            font-weight: 400;
+            font-size: 1.1rem;
             max-width: 600px;
             margin: 0 auto;
         }
 
-        .ai-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 20px;
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
-        }
-
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 380px;
+            grid-template-columns: 1fr 1fr;
             gap: 40px;
             align-items: start;
         }
 
-        .reading-panel {
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 30px var(--shadow);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 8px 25px var(--shadow);
             border: 1px solid var(--border);
-            animation: fadeInLeft 0.8s ease-out;
-            position: relative;
-            overflow: hidden;
         }
 
-        .reading-panel::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, var(--accent), var(--accent-light));
-        }
-
-        @keyframes fadeInLeft {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .controls {
-            display: flex;
-            gap: 25px;
-            margin-bottom: 35px;
-            flex-wrap: wrap;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .control-group label {
+        .panel-title {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.4rem;
             font-weight: 600;
-            color: var(--text);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
         }
 
-        select, button {
-            padding: 14px 18px;
+        /* Word Search Section */
+        .search-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
             border: 1px solid var(--border);
             border-radius: 12px;
             font-size: 16px;
-            font-weight: 500;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             background: var(--card-bg);
-            color: var(--text);
         }
 
-        select {
-            cursor: pointer;
-            background: var(--card-bg);
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232c3e50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 16px;
-        }
-
-        select:focus, select:hover {
+        .search-input:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
 
-        .generate-btn {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+        .search-btn {
+            background: var(--accent);
             color: white;
             border: none;
-            cursor: pointer;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
-        }
-
-        .generate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
-        }
-
-        .generate-btn:active {
-            transform: translateY(-1px);
-        }
-
-        .generate-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .generate-btn.loading {
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 1; }
-        }
-
-        .reading-area {
-            background: var(--bg);
-            border-radius: 16px;
-            padding: 35px;
-            min-height: 300px;
-            margin-bottom: 25px;
-            border: 1px dashed var(--border);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .reading-area.has-content {
-            border: 1px solid var(--border);
-            background: var(--card-bg);
-        }
-
-        .paragraph {
-            font-size: 18px;
-            line-height: 1.8;
-            font-weight: 400;
-            letter-spacing: 0.2px;
-            color: var(--text);
-        }
-
-        .word {
             cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 8px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            display: inline-block;
-            margin: 2px 1px;
-            position: relative;
+            transition: all 0.3s ease;
         }
 
-        .word:hover {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-            color: white;
+        .search-btn:hover {
+            background: var(--accent-light);
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
-            z-index: 1;
         }
 
-        .word.clicked {
-            background: linear-gradient(135deg, var(--success) 0%, #27ae60 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-        }
-
-        .word.clicked:hover {
-            background: linear-gradient(135deg, #27ae60 0%, #219955 100%);
-            transform: translateY(-1px);
-        }
-
-        .pronunciation-display {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
+        .word-result {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 25px;
             margin-top: 20px;
             display: none;
-            text-align: center;
-            box-shadow: 0 8px 20px var(--shadow);
-            animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .pronunciation-display.show {
+        .word-result.active {
             display: block;
+            animation: fadeIn 0.5s ease-out;
         }
 
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(20px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            animation: fadeInRight 0.8s ease-out;
-        }
-
-        @keyframes fadeInRight {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .sidebar-panel {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 8px 25px var(--shadow);
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .sidebar-panel:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px var(--shadow-hover);
-        }
-
-        .sidebar-panel h3 {
-            color: var(--primary);
-            margin-bottom: 18px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .sidebar-panel h3 i {
-            color: var(--accent);
-        }
-
-        .progress-bar {
-            background: var(--bg);
-            border-radius: 10px;
-            height: 12px;
-            margin: 15px 0;
-            overflow: hidden;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-            position: relative;
-        }
-
-        .progress-fill {
-            background: linear-gradient(90deg, var(--success), #27ae60, #2ecc71);
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: progressShimmer 2s infinite;
-        }
-
-        @keyframes progressShimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        .vocabulary-list {
-            max-height: 220px;
-            overflow-y: auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .vocabulary-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .vocabulary-list::-webkit-scrollbar-track {
-            background: var(--bg);
-            border-radius: 10px;
-        }
-
-        .vocabulary-list::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, var(--accent), var(--accent-light));
-            border-radius: 10px;
-        }
-
-        .vocab-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: var(--bg);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid var(--border);
-        }
-
-        .vocab-item:hover {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
-            color: white;
-            transform: translateX(4px);
-            box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
-        }
-
-        .vocab-word {
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .vocab-item:hover .vocab-word,
-        .vocab-item:hover .vocab-pronunciation {
-            color: white;
-        }
-
-        .vocab-pronunciation {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            font-style: italic;
-        }
-
-        .achievement {
-            background: linear-gradient(135deg, var(--warning) 0%, #e67e22 100%);
-            color: white;
-            padding: 15px 18px;
-            border-radius: 12px;
-            margin: 8px 0;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.95rem;
-            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 6px 15px rgba(243, 156, 18, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes bounceIn {
-            0% { opacity: 0; transform: scale(0.3) translateY(20px); }
-            50% { opacity: 1; transform: scale(1.05) translateY(-10px); }
-            70% { transform: scale(0.9) translateY(0); }
-            100% { transform: scale(1) translateY(0); }
-        }
-
-        .challenge-mode {
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(155, 89, 182, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .challenge-mode > div:first-child {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .challenge-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.4);
-            padding: 12px 24px;
-            border-radius: 12px;
-            margin-top: 15px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            position: relative;
-            z-index: 1;
-        }
-
-        .challenge-btn:hover {
-            background: rgba(255,255,255,0.9);
-            color: #9b59b6;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(255,255,255,0.3);
-        }
-
-        .ai-status {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: var(--text);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            
-            .header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .controls {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .reading-panel {
-                padding: 30px;
-            }
-            
-            .sidebar-panel {
-                padding: 20px;
-            }
-        }
-
-        .loading {
-            text-align: center;
-            color: var(--text-light);
-            font-style: italic;
-            font-size: 1.1rem;
-            animation: loadingPulse 2s infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .loading::after {
-            content: '';
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--accent);
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes loadingPulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .empty-state {
-            text-align: center;
-            color: var(--text-light);
-            font-size: 1.1rem;
-            line-height: 1.6;
-            position: relative;
-            z-index: 1;
-            padding: 20px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .stat-item {
-            background: var(--bg);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .word-detail-panel {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 8px 25px var(--shadow);
-            border: 1px solid var(--border);
-            margin-top: 25px;
-            display: none;
-        }
-
-        .word-detail-panel.active {
-            display: block;
-            animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .word-header {
@@ -620,12 +158,10 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border);
         }
 
         .word-title {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
             color: var(--primary);
         }
@@ -649,12 +185,11 @@
             align-items: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
         }
 
         .audio-btn:hover {
-            transform: scale(1.1);
             background: var(--accent-light);
+            transform: scale(1.05);
         }
 
         .meaning-section {
@@ -666,9 +201,6 @@
             font-weight: 600;
             color: var(--primary);
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
         }
 
         .definitions {
@@ -704,7 +236,7 @@
         }
 
         .usage-section {
-            background: var(--bg);
+            background: var(--card-bg);
             border-radius: 12px;
             padding: 20px;
             margin-top: 20px;
@@ -724,9 +256,128 @@
         .usage-example {
             margin-bottom: 10px;
             padding: 10px 15px;
-            background: var(--card-bg);
+            background: var(--bg);
             border-radius: 8px;
-            box-shadow: 0 2px 5px var(--shadow);
+        }
+
+        /* Reading Section */
+        .reading-area {
+            background: var(--bg);
+            border-radius: 12px;
+            padding: 25px;
+            min-height: 200px;
+            margin-bottom: 20px;
+            border: 1px dashed var(--border);
+        }
+
+        .paragraph {
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .word {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            display: inline-block;
+            margin: 2px 1px;
+        }
+
+        .word:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .word.clicked {
+            background: var(--success);
+            color: white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            flex: 1;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--card-bg);
+        }
+
+        .generate-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .generate-btn:hover {
+            background: var(--accent-light);
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--text-light);
+            padding: 20px;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: var(--text-light);
+            padding: 30px;
+        }
+
+        .vocabulary-panel {
+            margin-top: 30px;
+        }
+
+        .vocabulary-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .vocab-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .vocab-item:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .vocab-word {
+            font-weight: 600;
+        }
+
+        .vocab-pronunciation {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .vocab-item:hover .vocab-pronunciation {
+            color: white;
         }
     </style>
 </head>
@@ -734,100 +385,39 @@
     <div class="container">
         <div class="header">
             <h1>LexiPro</h1>
-            <p>Advanced reading practice with intelligent pronunciation assistance</p>
-            <div class="ai-badge">
-                <i class="fas fa-robot"></i>
-                AI-Powered Learning
-            </div>
+            <p>Pronunciation guide and reading practice with intelligent content</p>
         </div>
 
         <div class="main-content">
-            <div class="reading-panel">
-                <div class="ai-status">
-                    <i class="fas fa-bolt"></i>
-                    <strong>Enhanced AI Engine</strong> - Generating personalized content based on your preferences
+            <!-- Word Search Panel -->
+            <div class="panel">
+                <h2 class="panel-title">Word Pronunciation</h2>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="wordInput" placeholder="Enter any English word..." autocomplete="off">
+                    <button class="search-btn" id="searchBtn">Search</button>
                 </div>
-
-                <div class="controls">
-                    <div class="control-group">
-                        <label for="topic"><i class="fas fa-book-open"></i> Topic</label>
-                        <select id="topic">
-                            <option value="technology">Technology</option>
-                            <option value="science">Science</option>
-                            <option value="nature">Nature</option>
-                            <option value="history">History</option>
-                            <option value="health">Health & Wellness</option>
-                            <option value="education">Education</option>
-                            <option value="entertainment">Entertainment</option>
-                            <option value="travel">Travel & Culture</option>
-                            <option value="food">Food & Cooking</option>
-                            <option value="sports">Sports & Fitness</option>
-                            <option value="environment">Environment</option>
-                            <option value="space">Space & Astronomy</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="difficulty"><i class="fas fa-chart-line"></i> Reading Level</label>
-                        <select id="difficulty">
-                            <option value="elementary">Elementary (Ages 6-10)</option>
-                            <option value="middle">Middle School (Ages 11-13)</option>
-                            <option value="high">High School (Ages 14-17)</option>
-                            <option value="college">College Level</option>
-                            <option value="advanced">Advanced/Professional</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="style"><i class="fas fa-pen-fancy"></i> Writing Style</label>
-                        <select id="style">
-                            <option value="informative">Informative</option>
-                            <option value="narrative">Story-telling</option>
-                            <option value="descriptive">Descriptive</option>
-                            <option value="analytical">Analytical</option>
-                            <option value="creative">Creative</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label>&nbsp;</label>
-                        <button class="generate-btn" onclick="generateParagraph()">
-                            <i class="fas fa-magic"></i>
-                            Generate Content
-                        </button>
-                    </div>
-                </div>
-
-                <div class="reading-area" id="readingArea">
-                    <div class="empty-state">
-                        <i class="fas fa-book-reader" style="font-size: 3rem; margin-bottom: 20px; color: var(--accent);"></i>
-                        <p>Select your preferences and click "Generate Content" to start practicing with AI-generated content!</p>
-                    </div>
-                </div>
-
-                <div class="pronunciation-display" id="pronunciationDisplay">
-                    <strong id="currentWord"></strong>
-                    <div id="pronunciation"></div>
-                    <small>Click to hear pronunciation</small>
-                </div>
-                
-                <div class="word-detail-panel" id="wordDetailPanel">
+                <div class="word-result" id="wordResult">
                     <div class="word-header">
                         <div>
-                            <h2 class="word-title" id="wordTitle">Word</h2>
+                            <h3 class="word-title" id="wordTitle">Word</h3>
                             <div class="phonetic" id="phoneticText">/fəˈnetɪk/</div>
                         </div>
                         <button class="audio-btn" id="audioBtn">
-                            <i class="fas fa-volume-up"></i>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 3V21M8 8V16M16 6V18M20 4V20M4 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
                         </button>
                     </div>
 
                     <div class="meaning-section">
-                        <h3 class="section-title"><i class="fas fa-book"></i> Meaning</h3>
+                        <h4 class="section-title">Meaning</h4>
                         <ul class="definitions" id="definitionsList">
                             <!-- Definitions will be inserted here -->
                         </ul>
                     </div>
 
                     <div class="usage-section">
-                        <h3 class="usage-title"><i class="fas fa-comment-alt"></i> Usage Examples</h3>
+                        <h4 class="usage-title">Usage Examples</h4>
                         <ul class="usage-examples" id="usageExamples">
                             <!-- Usage examples will be inserted here -->
                         </ul>
@@ -835,51 +425,38 @@
                 </div>
             </div>
 
-            <div class="sidebar">
-                <div class="sidebar-panel">
-                    <h3><i class="fas fa-chart-bar"></i> Reading Progress</h3>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            <!-- Reading Panel -->
+            <div class="panel">
+                <h2 class="panel-title">Reading Practice</h2>
+                <div class="controls">
+                    <div class="control-group">
+                        <select id="topic">
+                            <option value="technology">Technology</option>
+                            <option value="science">Science</option>
+                            <option value="history">History</option>
+                            <option value="literature">Literature</option>
+                        </select>
                     </div>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-number" id="wordsCount">0</div>
-                            <div class="stat-label">Words Read</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number" id="accuracyRate">0%</div>
-                            <div class="stat-label">Progress</div>
-                        </div>
+                    <div class="control-group">
+                        <select id="difficulty">
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <button class="generate-btn" onclick="generateParagraph()">Generate Text</button>
+                </div>
+                <div class="reading-area" id="readingArea">
+                    <div class="empty-state">
+                        <p>Select options and click "Generate Text" to start reading practice</p>
                     </div>
                 </div>
-
-                <div class="sidebar-panel">
-                    <h3><i class="fas fa-bolt"></i> Smart Practice</h3>
-                    <div class="challenge-mode">
-                        <div>AI-Generated Content</div>
-                        <div style="font-size: 0.9rem; margin-top: 5px; opacity: 0.9;">Fresh content every time</div>
-                        <button class="challenge-btn" onclick="generateParagraph()">
-                            <i class="fas fa-sync-alt"></i> New Content
-                        </button>
-                    </div>
-                </div>
-
-                <div class="sidebar-panel">
-                    <h3><i class="fas fa-bookmark"></i> Vocabulary</h3>
+                
+                <div class="vocabulary-panel">
+                    <h4 class="section-title">Your Vocabulary</h4>
                     <div class="vocabulary-list" id="vocabularyList">
-                        <div class="empty-state" style="padding: 20px;">
-                            <i class="fas fa-language" style="font-size: 2rem; margin-bottom: 15px; color: var(--accent);"></i>
-                            <p>Click on words while reading to save them here!</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sidebar-panel">
-                    <h3><i class="fas fa-trophy"></i> Achievements</h3>
-                    <div id="achievements">
-                        <div class="empty-state" style="padding: 20px;">
-                            <i class="fas fa-medal" style="font-size: 2rem; margin-bottom: 15px; color: var(--warning);"></i>
-                            <p>Start reading to unlock achievements!</p>
+                        <div class="empty-state">
+                            <p>Click on words while reading to save them here</p>
                         </div>
                     </div>
                 </div>
@@ -888,46 +465,14 @@
     </div>
 
     <script>
-        // Global state
-        let sessionData = {
-            clickedWords: new Set(),
-            vocabulary: [],
-            achievements: [],
-            currentParagraphWords: 0,
-            contentHistory: new Set()
-        };
-
-        // Enhanced pronunciation dictionary
-        const pronunciations = {
-            'artificial': 'ar-tuh-FISH-uhl',
-            'intelligence': 'in-TEL-uh-juhns',
-            'technology': 'tek-NOL-uh-jee',
-            'photosynthesis': 'foh-tuh-SIN-thuh-sis',
-            'ecosystem': 'EE-koh-sis-tuhm',
-            'biodiversity': 'bahy-oh-dih-VUR-si-tee',
-            'algorithm': 'AL-guh-rith-uhm',
-            'quantum': 'KWAN-tuhm',
-            'revolutionary': 'rev-uh-LOO-shuh-ner-ee',
-            'sophisticated': 'suh-FIS-ti-kay-tid',
-            'extraordinary': 'ik-STRAWR-dn-er-ee',
-            'magnificent': 'mag-NIF-uh-suhnt',
-            'fascinating': 'FAS-uh-nay-ting',
-            'environment': 'en-VAHY-ruhn-muhnt',
-            'sustainability': 'suh-stay-nuh-BIL-i-tee',
-            'civilization': 'siv-uh-luh-ZAY-shun',
-            'architecture': 'AHR-ki-tek-cher',
-            'opportunity': 'op-er-TOO-ni-tee',
-            'communication': 'kuh-myoo-ni-KAY-shun',
-            'responsibility': 'ri-spon-suh-BIL-i-tee'
-        };
-
-        // Word definitions database
-        const wordDefinitions = {
+        // Word database with pronunciations, meanings, and examples
+        const wordDatabase = {
             'artificial': {
+                phonetic: '/ˌɑːr.t̬ɪˈfɪʃ.əl/',
                 meanings: [
                     {
                         partOfSpeech: 'adjective',
-                        definition: 'Made or produced by human beings rather than occurring naturally, especially as a copy of something natural.',
+                        definition: 'Made or produced by human beings rather than occurring naturally.',
                         example: 'Artificial flowers can look surprisingly realistic.'
                     },
                     {
@@ -943,6 +488,7 @@
                 ]
             },
             'intelligence': {
+                phonetic: '/ɪnˈtel.ə.dʒəns/',
                 meanings: [
                     {
                         partOfSpeech: 'noun',
@@ -962,10 +508,11 @@
                 ]
             },
             'technology': {
+                phonetic: '/tekˈnɑː.lə.dʒi/',
                 meanings: [
                     {
                         partOfSpeech: 'noun',
-                        definition: 'The application of scientific knowledge for practical purposes, especially in industry.',
+                        definition: 'The application of scientific knowledge for practical purposes.',
                         example: 'Advances in medical technology have saved countless lives.'
                     }
                 ],
@@ -975,198 +522,282 @@
                     'We need to consider the ethical implications of new technologies.'
                 ]
             },
-            'photosynthesis': {
+            'environment': {
+                phonetic: '/ɪnˈvaɪ.rən.mənt/',
                 meanings: [
                     {
                         partOfSpeech: 'noun',
-                        definition: 'The process by which green plants and some other organisms use sunlight to synthesize foods from carbon dioxide and water.',
-                        example: 'Photosynthesis in plants generally involves the green pigment chlorophyll.'
+                        definition: 'The surroundings or conditions in which a person, animal, or plant lives.',
+                        example: 'Children need a happy home environment.'
+                    },
+                    {
+                        partOfSpeech: 'noun',
+                        definition: 'The natural world, especially as affected by human activity.',
+                        example: 'We need to protect the environment for future generations.'
                     }
                 ],
                 examples: [
-                    'Without photosynthesis, life on Earth as we know it would not exist.',
-                    'Scientists are studying ways to improve photosynthesis in crops.',
-                    'The rate of photosynthesis decreases in low light conditions.'
+                    'The new office provides a pleasant working environment.',
+                    'Environmental concerns are increasingly important in politics.',
+                    'We must consider the environmental impact of our actions.'
+                ]
+            },
+            'education': {
+                phonetic: '/ˌedʒ.əˈkeɪ.ʃən/',
+                meanings: [
+                    {
+                        partOfSpeech: 'noun',
+                        definition: 'The process of receiving or giving systematic instruction.',
+                        example: 'She completed her education at Harvard University.'
+                    },
+                    {
+                        partOfSpeech: 'noun',
+                        definition: 'An enlightening experience that leads to understanding.',
+                        example: 'Traveling abroad was an education in itself.'
+                    }
+                ],
+                examples: [
+                    'Access to quality education should be available to everyone.',
+                    'The government increased funding for public education.',
+                    'His education prepared him well for his career.'
+                ]
+            },
+            'communication': {
+                phonetic: '/kəˌmjuː.nɪˈkeɪ.ʃən/',
+                meanings: [
+                    {
+                        partOfSpeech: 'noun',
+                        definition: 'The imparting or exchanging of information.',
+                        example: 'Clear communication is essential in any relationship.'
+                    },
+                    {
+                        partOfSpeech: 'noun',
+                        definition: 'Means of connection between people or places.',
+                        example: 'The new road improved communication between the towns.'
+                    }
+                ],
+                examples: [
+                    'Effective communication skills are valuable in any profession.',
+                    'The breakdown in communication led to misunderstandings.',
+                    'Modern communication technologies have transformed society.'
+                ]
+            },
+            'sustainability': {
+                phonetic: '/səˌsteɪ.nəˈbɪl.ə.t̬i/',
+                meanings: [
+                    {
+                        partOfSpeech: 'noun',
+                        definition: 'The ability to be maintained at a certain rate or level.',
+                        example: 'We need to ensure the sustainability of our resources.'
+                    },
+                    {
+                        partOfSpeech: 'noun',
+                        definition: 'Avoidance of the depletion of natural resources.',
+                        example: 'The company focuses on environmental sustainability.'
+                    }
+                ],
+                examples: [
+                    'Sustainable agriculture considers long-term environmental impacts.',
+                    'The building was designed with sustainability in mind.',
+                    'We must find a balance between economic growth and sustainability.'
+                ]
+            },
+            'innovation': {
+                phonetic: '/ˌɪn.əˈveɪ.ʃən/',
+                meanings: [
+                    {
+                        partOfSpeech: 'noun',
+                        definition: 'The action or process of innovating.',
+                        example: 'Technological innovation drives economic growth.'
+                    },
+                    {
+                        partOfSpeech: 'noun',
+                        definition: 'A new method, idea, or product.',
+                        example: 'The company is known for its many innovations.'
+                    }
+                ],
+                examples: [
+                    'The smartphone was a major innovation in communication.',
+                    'We encourage innovation and creative thinking in our team.',
+                    'Continuous innovation is necessary to stay competitive.'
                 ]
             }
         };
 
-        // Advanced AI Content Generator
-        class AIContentGenerator {
-            constructor() {
-                this.templates = this.initializeTemplates();
-                this.vocabularyLevels = this.initializeVocabulary();
-                this.sentencePatterns = this.initializeSentencePatterns();
+        // Reading content database
+        const readingContent = {
+            technology: {
+                beginner: "Computers help us do many things. They can store information and solve problems. People use computers for work and fun. Smartphones are small computers we carry with us.",
+                intermediate: "Artificial intelligence is changing how we interact with technology. Machine learning algorithms can recognize patterns in data. These systems improve over time without explicit programming.",
+                advanced: "The convergence of quantum computing and artificial intelligence promises to revolutionize computational capabilities. Quantum algorithms could solve problems intractable for classical computers."
+            },
+            science: {
+                beginner: "Plants need sunlight to grow. They use a process called photosynthesis. This helps them make food from light and air. Animals eat plants or other animals.",
+                intermediate: "DNA contains the genetic instructions for all living organisms. Through processes like transcription and translation, these instructions are used to create proteins.",
+                advanced: "The CRISPR-Cas9 system represents a paradigm shift in genetic engineering, enabling precise editing of genomic sequences with unprecedented accuracy and efficiency."
+            },
+            history: {
+                beginner: "Long ago, people lived in small groups. They hunted animals and gathered plants. Later, they learned to farm and built villages. This changed how people lived.",
+                intermediate: "The Industrial Revolution transformed societies from agrarian to industrial economies. New manufacturing processes and machinery changed how goods were produced.",
+                advanced: "The Renaissance period marked a cultural rebirth that profoundly influenced European intellectual life, bridging the gap between the Middle Ages and modern history."
+            },
+            literature: {
+                beginner: "Stories help us understand the world. They can be about real people or made-up characters. Books let us visit different places and times without traveling.",
+                intermediate: "Literary analysis involves examining the elements of a text to understand its meaning and significance. Themes, symbols, and character development are key components.",
+                advanced: "Postmodern literature often challenges conventional narrative structures and explores the nature of reality and representation through metafiction and intertextuality."
+            }
+        };
+
+        // User vocabulary storage
+        let userVocabulary = [];
+
+        // DOM elements
+        const wordInput = document.getElementById('wordInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const wordResult = document.getElementById('wordResult');
+        const wordTitle = document.getElementById('wordTitle');
+        const phoneticText = document.getElementById('phoneticText');
+        const audioBtn = document.getElementById('audioBtn');
+        const definitionsList = document.getElementById('definitionsList');
+        const usageExamples = document.getElementById('usageExamples');
+        const readingArea = document.getElementById('readingArea');
+        const vocabularyList = document.getElementById('vocabularyList');
+
+        // Event listeners
+        searchBtn.addEventListener('click', searchWord);
+        wordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchWord();
+            }
+        });
+
+        // Word search function
+        function searchWord() {
+            const word = wordInput.value.trim().toLowerCase();
+            
+            if (!word) {
+                alert('Please enter a word to search');
+                return;
             }
 
-            async generateContent(topic, difficulty, style) {
-                // Simulate API call with timeout
-                await new Promise(resolve => setTimeout(resolve, 1500));
+            // Show loading state
+            wordResult.classList.remove('active');
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                if (wordDatabase[word]) {
+                    displayWordResult(wordDatabase[word], word);
+                } else {
+                    // For words not in our database, generate a phonetic pronunciation
+                    const phonetic = generatePhoneticPronunciation(word);
+                    const generatedData = {
+                        phonetic: `/${phonetic}/`,
+                        meanings: [
+                            {
+                                partOfSpeech: 'noun',
+                                definition: 'Definition not available in our database.',
+                                example: ''
+                            }
+                        ],
+                        examples: [
+                            `The word "${word}" was used in context.`,
+                            `She encountered the word "${word}" in her reading.`
+                        ]
+                    };
+                    displayWordResult(generatedData, word);
+                }
+            }, 500);
+        }
+
+        // Display word results
+        function displayWordResult(wordData, originalWord) {
+            // Set word title
+            wordTitle.textContent = originalWord.charAt(0).toUpperCase() + originalWord.slice(1);
+            
+            // Set phonetic text
+            phoneticText.textContent = wordData.phonetic;
+            
+            // Set audio button
+            audioBtn.onclick = () => {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(originalWord);
+                    utterance.rate = 0.8;
+                    utterance.pitch = 1.0;
+                    utterance.volume = 0.8;
+                    speechSynthesis.speak(utterance);
+                }
+            };
+            
+            // Clear previous definitions
+            definitionsList.innerHTML = '';
+            
+            // Add definitions
+            wordData.meanings.forEach(meaning => {
+                const definitionItem = document.createElement('li');
+                definitionItem.className = 'definition-item';
                 
-                const templates = this.getTemplatesForTopic(topic, difficulty);
-                let content = this.randomChoice(templates);
+                let definitionHTML = `<div class="definition-text"><strong>${meaning.partOfSpeech}:</strong> ${meaning.definition}</div>`;
                 
-                // Add style-specific modifications
-                content = this.applyStyle(content, style);
-                
-                // Ensure uniqueness
-                let attempts = 0;
-                while (sessionData.contentHistory.has(content) && attempts < 10) {
-                    content = this.randomChoice(templates);
-                    content = this.applyStyle(content, style);
-                    attempts++;
+                if (meaning.example) {
+                    definitionHTML += `<div class="example">Example: "${meaning.example}"</div>`;
                 }
                 
-                sessionData.contentHistory.add(content);
-                return content;
-            }
-
-            applyStyle(content, style) {
-                const styleModifications = {
-                    'narrative': content => content.replace(/\. /g, ', and then ').replace(/Scientists/g, 'Researchers'),
-                    'descriptive': content => content.replace(/is /g, 'appears to be ').replace(/are /g, 'seem to be '),
-                    'analytical': content => content.replace(/\. /g, '. Furthermore, ').replace(/because/g, 'due to the fact that'),
-                    'creative': content => content.replace(/The /g, 'Imagine the ').replace(/Scientists/g, 'Brilliant minds'),
-                    'informative': content => content // Keep as is
-                };
-
-                return styleModifications[style] ? styleModifications[style](content) : content;
-            }
-
-            randomChoice(array) {
-                return array[Math.floor(Math.random() * array.length)];
-            }
-
-            initializeTemplates() {
-                return {
-                    technology: {
-                        concepts: ['artificial intelligence', 'smartphones', 'computers', 'internet', 'robotics', 'virtual reality'],
-                        actions: ['transforms', 'connects', 'processes', 'analyzes', 'creates', 'facilitates'],
-                        descriptors: ['innovative', 'revolutionary', 'advanced', 'cutting-edge', 'sophisticated', 'efficient']
-                    },
-                    science: {
-                        concepts: ['experiments', 'discoveries', 'research', 'molecules', 'ecosystems', 'phenomena'],
-                        actions: ['investigates', 'discovers', 'analyzes', 'explores', 'reveals', 'demonstrates'],
-                        descriptors: ['fascinating', 'complex', 'remarkable', 'intricate', 'mysterious', 'groundbreaking']
-                    }
-                };
-            }
-
-            initializeVocabulary() {
-                return {
-                    elementary: ['big', 'good', 'nice', 'fun', 'easy', 'hard', 'fast', 'slow', 'happy', 'sad'],
-                    middle: ['important', 'interesting', 'difficult', 'amazing', 'creative', 'helpful', 'popular', 'modern'],
-                    high: ['significant', 'fascinating', 'challenging', 'innovative', 'comprehensive', 'beneficial', 'contemporary'],
-                    college: ['substantial', 'intriguing', 'complex', 'revolutionary', 'analytical', 'advantageous', 'sophisticated'],
-                    advanced: ['profound', 'multifaceted', 'intricate', 'paradigmatic', 'comprehensive', 'transformative', 'unprecedented']
-                };
-            }
-
-            initializeSentencePatterns() {
-                return {
-                    informative: [
-                        '{concept} {action} our understanding of {topic} in {descriptor} ways.',
-                        'Research shows that {concept} can {action} {descriptor} outcomes.',
-                        'The study of {concept} reveals {descriptor} patterns in {topic}.'
-                    ],
-                    narrative: [
-                        'Once upon a time, {concept} began to {action} the world of {topic}.',
-                        'The story of {concept} shows how it {action} {descriptor} changes.',
-                        'Through time, {concept} has continued to {action} and inspire people.'
-                    ]
-                };
-            }
-
-            getTemplatesForTopic(topic, difficulty) {
-                const allTemplates = {
-                    technology: {
-                        elementary: [
-                            'Computers help us do many things every day. They can play games, show videos, and help us learn new things. Smart phones let us talk to friends anywhere in the world. Technology makes life easier and more fun for everyone.',
-                            'Robots are machines that can move and do jobs. Some robots clean houses while others help doctors. They have computers inside that tell them what to do. Scientists keep making robots smarter and more helpful.',
-                            'The internet connects computers all around the world. We can find information about anything we want to know. People use it to send messages and share pictures. It helps us learn and stay connected with friends.'
-                        ],
-                        middle: [
-                            'Artificial intelligence is changing how computers work and think. These smart systems can learn from information and make decisions like humans do. AI helps doctors find diseases and helps cars drive themselves. This technology is becoming part of our daily lives.',
-                            'Virtual reality creates fake worlds that feel real when you wear special glasses. People can visit ancient Rome or swim with dolphins without leaving their room. VR is used for games, education, and training in many different jobs.',
-                            'Smartphones have more computing power than the computers that sent people to the moon. They contain tiny sensors that detect motion, location, and light. These devices have revolutionized communication and put the world\'s information in our pockets.'
-                        ],
-                        high: [
-                            'Machine learning algorithms analyze vast amounts of data to identify patterns and make predictions. These systems improve their performance over time without explicit programming. From recommendation systems to autonomous vehicles, machine learning is transforming industries and creating new possibilities.',
-                            'Quantum computing represents a fundamental shift in how we process information. Unlike traditional computers that use binary bits, quantum computers use quantum bits that can exist in multiple states simultaneously. This could revolutionize cryptography, drug discovery, and complex problem-solving.',
-                            'The Internet of Things connects everyday objects to the internet, creating smart environments that respond to our needs. Sensors in homes, cities, and vehicles collect data to optimize energy use, traffic flow, and security systems.'
-                        ]
-                    },
-                    science: {
-                        elementary: [
-                            'Plants need sunlight, water, and air to grow big and strong. They make their own food using these things in a process called photosynthesis. The green color in leaves helps them catch sunlight. Without plants, animals and people could not survive.',
-                            'The human body has many amazing parts that work together. Your heart pumps blood to every part of your body. Your brain controls everything you think and do. Your bones are strong and help you stand up and move around.',
-                            'Animals live in different places around the world called habitats. Polar bears live where it\'s cold and snowy. Fish live in water and breathe through gills. Each animal has special features that help it survive where it lives.'
-                        ],
-                        middle: [
-                            'DNA contains the instructions that make each living thing unique. Scientists can study DNA to understand how traits pass from parents to their children. This genetic code determines everything from eye color to height. Medical researchers use DNA knowledge to develop new treatments for diseases.',
-                            'The water cycle moves water around the Earth through evaporation, condensation, and precipitation. When the sun heats oceans and rivers, water turns into invisible vapor that rises into the sky. This vapor forms clouds that eventually release rain or snow.',
-                            'Chemical reactions happen when different substances combine to create something new. Baking a cake involves chemical reactions that change flour, eggs, and sugar into something completely different. These reactions can release energy as heat or light.'
-                        ],
-                        high: [
-                            'Genetic engineering techniques allow scientists to modify organisms by inserting, deleting, or changing specific DNA sequences. CRISPR technology has revolutionized this field by providing precise tools for genome editing. These advances hold promise for treating genetic diseases and improving crop yields.',
-                            'Climate change results from increased greenhouse gas concentrations in the atmosphere, primarily from human activities. Rising global temperatures affect weather patterns, sea levels, and ecosystem stability. Understanding these complex interactions is crucial for developing effective mitigation strategies.',
-                            'Cellular respiration converts glucose and oxygen into energy that cells can use for vital functions. This process occurs in mitochondria and involves multiple enzymatic reactions. The efficiency of cellular respiration determines an organism\'s metabolic capacity and survival ability.'
-                        ]
-                    }
-                };
-
-                return allTemplates[topic]?.[difficulty] || allTemplates.technology[difficulty];
-            }
+                definitionItem.innerHTML = definitionHTML;
+                definitionsList.appendChild(definitionItem);
+            });
+            
+            // Clear previous usage examples
+            usageExamples.innerHTML = '';
+            
+            // Add usage examples
+            wordData.examples.forEach(example => {
+                const exampleItem = document.createElement('li');
+                exampleItem.className = 'usage-example';
+                exampleItem.textContent = example;
+                usageExamples.appendChild(exampleItem);
+            });
+            
+            // Show the result panel
+            wordResult.classList.add('active');
         }
 
-        // Initialize AI Content Generator
-        const aiGenerator = new AIContentGenerator();
+        // Generate phonetic pronunciation for unknown words
+        function generatePhoneticPronunciation(word) {
+            // Simple phonetic approximation
+            const vowels = ['a', 'e', 'i', 'o', 'u'];
+            let phonetic = '';
+            
+            for (let i = 0; i < word.length; i++) {
+                const char = word[i];
+                if (vowels.includes(char)) {
+                    phonetic += char;
+                } else {
+                    phonetic += char;
+                }
+                
+                if (i < word.length - 1 && Math.random() > 0.7) {
+                    phonetic += '-';
+                }
+            }
+            
+            return phonetic;
+        }
 
-        // Main content generation function
-        async function generateParagraph() {
+        // Generate reading paragraph
+        function generateParagraph() {
             const topic = document.getElementById('topic').value;
             const difficulty = document.getElementById('difficulty').value;
-            const style = document.getElementById('style').value;
-            const readingArea = document.getElementById('readingArea');
-            const generateBtn = document.querySelector('.generate-btn');
             
-            // Show loading state
-            generateBtn.classList.add('loading');
-            generateBtn.disabled = true;
-            
-            readingArea.innerHTML = '<div class="loading"><i class="fas fa-robot"></i> AI is creating personalized content...</div>';
-            
-            try {
-                const content = await aiGenerator.generateContent(topic, difficulty, style);
-                displayParagraph(content);
-                readingArea.classList.add('has-content');
-                
-                // Reset session data for new paragraph
-                sessionData.clickedWords.clear();
-                sessionData.currentParagraphWords = content.split(' ').length;
-                updateProgress();
-                
-                // Show generation success
-                setTimeout(() => {
-                    showAchievement('🎯 New AI Content Generated!');
-                }, 500);
-                
-            } catch (error) {
-                console.error('Error generating AI content:', error);
-                readingArea.innerHTML = `
-                    <div style="background: #fee2e2; color: #dc2626; padding: 20px; border-radius: 16px; text-align: center; font-weight: 500;">
-                        <i class="fas fa-exclamation-triangle"></i> Sorry, there was an error generating content. Please try again!
-                    </div>
-                `;
-            } finally {
-                // Reset button state
-                generateBtn.classList.remove('loading');
-                generateBtn.disabled = false;
+            if (readingContent[topic] && readingContent[topic][difficulty]) {
+                const content = readingContent[topic][difficulty];
+                displayReadingParagraph(content);
+            } else {
+                readingArea.innerHTML = '<div class="loading">Content not available for selected options</div>';
             }
         }
 
-        function displayParagraph(text) {
-            const readingArea = document.getElementById('readingArea');
+        // Display reading paragraph with clickable words
+        function displayReadingParagraph(text) {
             const words = text.split(' ');
             
             const paragraph = document.createElement('div');
@@ -1177,8 +808,7 @@
                 const wordSpan = document.createElement('span');
                 wordSpan.className = 'word';
                 wordSpan.textContent = word;
-                wordSpan.dataset.word = cleanWord.toLowerCase();
-                wordSpan.onclick = () => showWordDetails(wordSpan, cleanWord);
+                wordSpan.onclick = () => handleWordClick(wordSpan, cleanWord);
                 paragraph.appendChild(wordSpan);
                 
                 if (index < words.length - 1) {
@@ -1190,242 +820,68 @@
             readingArea.appendChild(paragraph);
         }
 
-        function showWordDetails(wordElement, word) {
+        // Handle word click in reading area
+        function handleWordClick(wordElement, word) {
             // Mark word as clicked
             wordElement.classList.add('clicked');
-            sessionData.clickedWords.add(word.toLowerCase());
-            updateProgress();
             
-            // Show pronunciation
-            const pronunciationDisplay = document.getElementById('pronunciationDisplay');
-            const currentWord = document.getElementById('currentWord');
-            const pronunciation = document.getElementById('pronunciation');
+            // Add to vocabulary if not already there
+            if (!userVocabulary.includes(word.toLowerCase())) {
+                userVocabulary.push(word.toLowerCase());
+                updateVocabularyList();
+            }
             
-            currentWord.textContent = word;
-            pronunciation.textContent = `/${pronunciations[word.toLowerCase()] || generatePhoneticPronunciation(word)}/`;
-            pronunciationDisplay.classList.add('show');
-            
-            // Text-to-speech
+            // Pronounce the word
             if ('speechSynthesis' in window) {
                 const utterance = new SpeechSynthesisUtterance(word);
-                utterance.rate = 0.7;
+                utterance.rate = 0.8;
                 utterance.pitch = 1.0;
                 utterance.volume = 0.8;
                 speechSynthesis.speak(utterance);
             }
-            
-            // Show detailed word information
-            showDetailedWordInfo(word);
-            
-            // Save complex words to vocabulary
-            if (shouldSaveToVocabulary(word)) {
-                saveToVocabulary(word);
-            }
-            
-            // Hide pronunciation after 4 seconds
-            setTimeout(() => {
-                pronunciationDisplay.classList.remove('show');
-            }, 4000);
         }
 
-        function showDetailedWordInfo(word) {
-            const wordDetailPanel = document.getElementById('wordDetailPanel');
-            const wordTitle = document.getElementById('wordTitle');
-            const phoneticText = document.getElementById('phoneticText');
-            const definitionsList = document.getElementById('definitionsList');
-            const usageExamples = document.getElementById('usageExamples');
-            const audioBtn = document.getElementById('audioBtn');
-            
-            // Set word title
-            wordTitle.textContent = word.charAt(0).toUpperCase() + word.slice(1);
-            
-            // Set phonetic text
-            phoneticText.textContent = `/${pronunciations[word.toLowerCase()] || generatePhoneticPronunciation(word)}/`;
-            
-            // Set audio button
-            audioBtn.onclick = () => {
-                if ('speechSynthesis' in window) {
-                    const utterance = new SpeechSynthesisUtterance(word);
-                    utterance.rate = 0.7;
-                    utterance.pitch = 1.0;
-                    utterance.volume = 0.8;
-                    speechSynthesis.speak(utterance);
-                }
-            };
-            
-            // Clear previous definitions
-            definitionsList.innerHTML = '';
-            
-            // Add definitions
-            if (wordDefinitions[word.toLowerCase()]) {
-                const wordData = wordDefinitions[word.toLowerCase()];
-                
-                wordData.meanings.forEach(meaning => {
-                    const definitionItem = document.createElement('li');
-                    definitionItem.className = 'definition-item';
-                    
-                    let definitionHTML = `<div class="definition-text"><strong>${meaning.partOfSpeech}:</strong> ${meaning.definition}</div>`;
-                    
-                    if (meaning.example) {
-                        definitionHTML += `<div class="example">Example: "${meaning.example}"</div>`;
-                    }
-                    
-                    definitionItem.innerHTML = definitionHTML;
-                    definitionsList.appendChild(definitionItem);
-                });
-            } else {
-                definitionsList.innerHTML = '<li class="definition-item">No detailed definitions available</li>';
-            }
-            
-            // Clear previous usage examples
-            usageExamples.innerHTML = '';
-            
-            // Add usage examples
-            if (wordDefinitions[word.toLowerCase()] && wordDefinitions[word.toLowerCase()].examples) {
-                const examples = wordDefinitions[word.toLowerCase()].examples;
-                
-                examples.forEach(example => {
-                    const exampleItem = document.createElement('li');
-                    exampleItem.className = 'usage-example';
-                    exampleItem.textContent = example;
-                    usageExamples.appendChild(exampleItem);
-                });
-            } else {
-                usageExamples.innerHTML = '<li class="usage-example">No usage examples available</li>';
-            }
-            
-            // Show the detailed panel
-            wordDetailPanel.classList.add('active');
-        }
-
-        function generatePhoneticPronunciation(word) {
-            return word.toLowerCase().replace(/[^a-z]/g, '').split('').map(char => {
-                const phoneticMap = {
-                    'a': 'ay', 'e': 'ee', 'i': 'ahy', 'o': 'oh', 'u': 'oo',
-                    'y': 'wahy', 'c': 'see', 'g': 'jee', 'j': 'jay'
-                };
-                return phoneticMap[char] || char;
-            }).join('-');
-        }
-
-        function shouldSaveToVocabulary(word) {
-            const cleanWord = word.toLowerCase().replace(/[^a-z]/g, '');
-            return cleanWord.length > 6 && !sessionData.vocabulary.some(v => v.word.toLowerCase() === cleanWord);
-        }
-
-        function saveToVocabulary(word) {
-            const cleanWord = word.replace(/[^a-zA-Z]/g, '');
-            sessionData.vocabulary.push({
-                word: cleanWord,
-                pronunciation: pronunciations[cleanWord.toLowerCase()] || generatePhoneticPronunciation(cleanWord),
-                topic: document.getElementById('topic').value
-            });
-            updateVocabulary();
-        }
-
-        function updateProgress() {
-            const wordsRead = sessionData.clickedWords.size;
-            const totalWords = sessionData.currentParagraphWords || document.querySelectorAll('.word').length;
-            
-            const progress = totalWords > 0 ? (wordsRead / totalWords) * 100 : 0;
-            document.getElementById('progressFill').style.width = Math.min(progress, 100) + '%';
-            
-            document.getElementById('wordsCount').textContent = wordsRead;
-            document.getElementById('accuracyRate').textContent = Math.round(progress) + '%';
-            
-            checkAchievements();
-        }
-
-        function updateVocabulary() {
-            const vocabularyList = document.getElementById('vocabularyList');
-            
-            if (sessionData.vocabulary.length === 0) {
-                vocabularyList.innerHTML = '<div class="empty-state" style="padding: 20px;"><p>Click on words while reading to save them here!</p></div>';
+        // Update vocabulary list display
+        function updateVocabularyList() {
+            if (userVocabulary.length === 0) {
+                vocabularyList.innerHTML = '<div class="empty-state"><p>Click on words while reading to save them here</p></div>';
                 return;
             }
             
             vocabularyList.innerHTML = '';
-            sessionData.vocabulary.slice(-8).reverse().forEach(item => {
+            userVocabulary.forEach(word => {
                 const vocabItem = document.createElement('div');
                 vocabItem.className = 'vocab-item';
+                
+                // Try to get pronunciation from database, or generate one
+                let pronunciation = '/???/';
+                if (wordDatabase[word]) {
+                    pronunciation = wordDatabase[word].phonetic;
+                } else {
+                    pronunciation = `/${generatePhoneticPronunciation(word)}/`;
+                }
+                
                 vocabItem.innerHTML = `
-                    <span class="vocab-word">${item.word}</span>
-                    <span class="vocab-pronunciation">/${item.pronunciation}/</span>
+                    <span class="vocab-word">${word}</span>
+                    <span class="vocab-pronunciation">${pronunciation}</span>
                 `;
+                
                 vocabItem.onclick = () => {
+                    // Pronounce the word when clicked in vocabulary
                     if ('speechSynthesis' in window) {
-                        const utterance = new SpeechSynthesisUtterance(item.word);
+                        const utterance = new SpeechSynthesisUtterance(word);
                         speechSynthesis.speak(utterance);
                     }
                 };
+                
                 vocabularyList.appendChild(vocabItem);
             });
         }
 
-        function checkAchievements() {
-            const achievements = [];
-            const wordsRead = sessionData.clickedWords.size;
-            
-            if (wordsRead >= 10 && !sessionData.achievements.includes('first10')) {
-                achievements.push({ id: 'first10', title: '🎉 First 10 Words!' });
-            }
-            if (wordsRead >= 25 && !sessionData.achievements.includes('quarter')) {
-                achievements.push({ id: 'quarter', title: '🚀 Quarter Century!' });
-            }
-            if (wordsRead >= 50 && !sessionData.achievements.includes('half')) {
-                achievements.push({ id: 'half', title: '📚 Half Century!' });
-            }
-            if (sessionData.vocabulary.length >= 5 && !sessionData.achievements.includes('vocab')) {
-                achievements.push({ id: 'vocab', title: '🔤 Vocabulary Builder!' });
-            }
-            
-            achievements.forEach(achievement => {
-                if (!sessionData.achievements.includes(achievement.id)) {
-                    sessionData.achievements.push(achievement.id);
-                    showAchievement(achievement.title);
-                }
-            });
-        }
-
-        function showAchievement(title) {
-            const achievementsContainer = document.getElementById('achievements');
-            
-            if (achievementsContainer.querySelector('.empty-state')) {
-                achievementsContainer.innerHTML = '';
-            }
-            
-            const achievementElement = document.createElement('div');
-            achievementElement.className = 'achievement';
-            achievementElement.textContent = title;
-            achievementsContainer.appendChild(achievementElement);
-        }
-
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            // Generate initial content
-            setTimeout(() => {
-                generateParagraph();
-            }, 1000);
-
-            // Show tips
-            setTimeout(() => {
-                const tips = [
-                    "🤖 AI adapts content to your reading level",
-                    "📚 Try different topics and styles for variety",
-                    "🔊 Click any word to hear pronunciation",
-                    "📖 Detailed word information available"
-                ];
-                
-                let tipIndex = 0;
-                const showTip = () => {
-                    if (tipIndex < tips.length) {
-                        showAchievement(tips[tipIndex]);
-                        tipIndex++;
-                        setTimeout(showTip, 3000);
-                    }
-                };
-                setTimeout(showTip, 2000);
-            }, 1000);
+            // Generate initial reading content
+            generateParagraph();
         });
     </script>
 </body>
